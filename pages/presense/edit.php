@@ -5,7 +5,12 @@ if (isset($_GET['presence_id'])) {
 
     $presence_id = mysqli_real_escape_string($con, $_GET['presence_id']);
 
-    $query = "SELECT * FROM hr_presence WHERE ID_PRESENCE = '$presence_id'";
+    $query = "SELECT h.*, sr.NOM, sr.PRENOM
+    FROM hr_presence AS h 
+    LEFT JOIN stage AS st ON h.ID_presence = st.ID_presence 
+    LEFT JOIN stagiaire AS sr ON sr.ID_STAGIAIRE = st.ID_STAGIAIRE
+    WHERE h.ID_PRESENCE = '$presence_id'";
+
     $query_run = mysqli_query($con, $query);
 
     if (mysqli_num_rows($query_run) == 1) {
