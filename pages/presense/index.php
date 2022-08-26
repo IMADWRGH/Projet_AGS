@@ -25,6 +25,10 @@ if (!isset($_SESSION['role'])) {
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
 
+    <!-- Alertify styles -->
+    <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
+    <link rel="stylesheet" href="../../resources/vendor/alertify/css/themes/bootstrap.css" />
+
     <!-- Custom styles for this page -->
     <link href="../../resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
@@ -169,7 +173,7 @@ if (!isset($_SESSION['role'])) {
                                                     <td class="align-middle">
                                                         <a href="#" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
                                                         <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-info" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
-                                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="deletePresenceBtn btn btn-danger"><i class="fas fa-trash"></i></a>
                                                     </td>
                                                 </tr>
                                         <?php
@@ -212,7 +216,7 @@ if (!isset($_SESSION['role'])) {
                 <form id="updatePresence">
                     <div class="modal-body">
                         <div class="alert alert-warning d-none" id="errorMessageUpdate"></div>
-                        <input type="text" name="presence_id" id="presence_id">
+                        <input type="hidden" name="presence_id" id="presence_id">
                         <div class="mb-3">
                             <label for="m-in">M.Entree</label>
                             <input type="text" name="m-in" id="m-in" class="form-control">
@@ -263,6 +267,7 @@ if (!isset($_SESSION['role'])) {
     <!-- Page level plugins -->
     <script src="../../resources/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../../resources/vendor/alertify/alertify.min.js"></script>
 
     <script>
         // Call the dataTables jQuery plugin
@@ -287,10 +292,11 @@ if (!isset($_SESSION['role'])) {
                     if (res.status === 404) {
 
                         $('#message').removeClass('d-none');
-                        $('$errorMessage')
+                        $('#errorMessageUpdate').text(res.message);
 
                     } else if (res.status === 200) {
 
+                        $('#exampleModalLabel').text(res.data.NOM + " " + res.data.PRENOM)
                         $('#presence_id').val(res.data.ID_PRESENCE)
                         $('#m-in').val(res.data.HR_ENTRE_M)
                         $('#m-out').val(res.data.HR_SORTIE_M)
@@ -335,6 +341,35 @@ if (!isset($_SESSION['role'])) {
                     }
                 }
             });
+        });
+
+        //Delete Presence
+        $(document).on('click', '.deletePresenceBtn', function(e) {
+
+            e.preventDefault();
+            if (confirm("are you sure u want delete this record?")) {
+                var presence_id = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "delete.php",
+                    data: {
+                        'delete_presence': true,
+                        'presence_id': presence_id,
+                    },
+                    success: function(response) {
+                        var res = jQuery.parseJSON(response);
+
+                        if (res.status === 500) {
+
+                            alertify.error('Error notification message.');
+
+                        } else if (res.status === 200) {
+                            alertify.success('Success notification message.');
+                            $("#dataTable").load(location.href + " #dataTable");
+                        }
+                    }
+                });
+            }
         });
     </script>
 
