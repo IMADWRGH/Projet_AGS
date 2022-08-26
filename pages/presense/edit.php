@@ -30,23 +30,13 @@ if (isset($_GET['presence_id'])) {
     }
 }
 
-if (isset($_POST['update_student'])) {
+if (isset($_POST['update_presence'])) {
 
     $presence_id = mysqli_real_escape_string($con, $_POST['presence_id']);
     $m_in = mysqli_real_escape_string($con, $_POST['m-in']);
     $m_out = mysqli_real_escape_string($con, $_POST['m-out']);
     $a_in = mysqli_real_escape_string($con, $_POST['a-in']);
     $a_out = mysqli_real_escape_string($con, $_POST['a-out']);
-
-    // if($m_in == NULL || m_out == NULL || a_in == NULL || a_out == NULL) {
-
-    //     $res = [
-    //         'status' => 422,
-    //         'message' => 'All fields are mandatory'
-    //     ]
-    //     echo json_encode($res);
-    //     return false;
-    // }
 
     $query = "UPDATE hr_presence SET HR_ENTRE_M='$m_in', HR_SORTIE_M='$m_out', HR_ENTRE_A='$a_in', HR_SORTIE_A='$a_out' WHERE ID_PRESENCE='$presence_id'";
     $query_run = mysqli_query($con, $query);
@@ -56,7 +46,6 @@ if (isset($_POST['update_student'])) {
         $res = [
             'status' => 200,
             'message' => "Presence ('$presence_id') Updated Successfully",
-            'data' => $presence,
         ];
         echo json_encode($res);
         return false;
