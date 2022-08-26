@@ -188,16 +188,6 @@ if (!isset($_SESSION['role'])) {
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
         </div>
         <!-- End of Content Wrapper -->
 
@@ -240,11 +230,11 @@ if (!isset($_SESSION['role'])) {
                             <input type="text" name="a-out" id="a-out" class="form-control">
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Modifier</button>
+                        <button class="btn btn-dark" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
                 </form>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Modifier</button>
-                    <button class="btn btn-dark" type="button" data-dismiss="modal">Cancel</button>
-                </div>
             </div>
         </div>
     </div>
@@ -315,10 +305,10 @@ if (!isset($_SESSION['role'])) {
 
         //Update Presence
         $(document).on('submit', '#updatePresence', function(e) {
-            console.log(00)
+
             e.preventDefault();
 
-            var formData = new formData(this)
+            var formData = new FormData(this)
             formData.append("update_presence", true)
 
             $.ajax({
@@ -328,17 +318,20 @@ if (!isset($_SESSION['role'])) {
                 processData: false,
                 contentType: false,
                 success: function(response) {
+
+                    var res = jQuery.parseJSON(response);
+
                     if (res.status === 500) {
 
-                        $('$errorMessageUpdate').removeClass('d-none');
+                        $('#errorMessageUpdate').removeClass('d-none');
                         $('#errorMessageUpdate').text(res.message);
 
                     } else if (res.status === 200) {
-                        $('$errorMessageUpdate').addClass('d-none');
+                        $('#errorMessageUpdate').addClass('d-none');
                         $('#editPresenceModal').modal('hide');
                         $('#updatePresence')[0].reset();
 
-                        $("dataTable").load(location.href + " #dataTable");
+                        $("#dataTable").load(location.href + " #dataTable");
                     }
                 }
             });
