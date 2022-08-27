@@ -126,63 +126,124 @@ if (!isset($_SESSION['role'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Enregistrement des horaires de présence</h1>
 
-                    <!-- DataTales Example -->
+                    <!-- Saisi -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            <div class="row justify-content-between align-items-center">
+                                <h6 class="m-0 font-weight-bold text-primary">Recherche / Saisi</h6>
+                                <div class="form-group col-auto p-0 m-0">
+                                    <div class="input-group col-auto p-0 position-relative">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-search" style="color:darkgray"></i></div>
+                                        </div>
+                                        <input type="search" class="form-control form-control-sm" id="live_search">
+                                        <!-- Dropdown Search result -->
+                                        <div id="searchResult" class="bg-white border d-none" style="position: absolute; top: 42px; width: 220px;">
+                                            <ul class="list-group">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Nom</th>
-                                            <th>CIN</th>
-                                            <th>M.Entree</th>
-                                            <th>M.Sortie</th>
-                                            <th>A.Entree</th>
-                                            <th>A.Sortie</th>
-                                            <th>Options</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        require "../../helpers/condb.php";
+                            <form>
+                                <div class="form-row justify-content-between">
+                                    <div class="form-group col-auto">
+                                        <label for="email">Nom Prenom</label>
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-user"></i></div>
+                                            </div>
+                                            <input type="email" class="form-control" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="m-in">Horaires de présence</label>
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
+                                            <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
+                                            <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
+                                            <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-auto" style="margin-top:32px">
+                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-                                        $query = "SELECT h.*, sr.CIN, sr.NOM, sr.PRENOM
-                                        FROM hr_presence AS h 
-                                        LEFT JOIN stage AS st ON h.ID_presence = st.ID_presence 
-                                        LEFT JOIN stagiaire AS sr ON sr.ID_STAGIAIRE = st.ID_STAGIAIRE";
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Stagiaires présents</h1>
 
-                                        $query_run = mysqli_query($con, $query);
-
-                                        if (mysqli_num_rows($query_run) > 0) {
-                                            foreach ($query_run as $presence) {
-                                        ?>
-                                                <tr>
-                                                    <td class="align-middle"><?= date("d-m-y", strtotime($presence["DATE"])) ?></td>
-                                                    <td class="align-middle"><?= $presence["NOM"] ?> <?= $presence["PRENOM"] ?></td>
-                                                    <td class="align-middle"><?= $presence["CIN"] ?></td>
-                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?></td>
-                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?></td>
-                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?></td>
-                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?></td>
-                                                    <td class="align-middle">
-                                                        <a href="#" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
-                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-info" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
-                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="deletePresenceBtn btn btn-danger"><i class="fas fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                        <?php
-                                            }
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <!-- In Only -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Recherche / Saisi</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row justify-content-between">
+                                    <div class="form-group col-auto">
+                                        <label for="email">Nom Prenom</label>
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-user"></i></div>
+                                            </div>
+                                            <input type="email" class="form-control" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="m-in">Horaires de présence</label>
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
+                                            <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
+                                            <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
+                                            <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-auto" style="margin-top:32px">
+                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="form-row justify-content-between">
+                                    <input type="hidden" name="presence_id" id="presence_id">
+                                    <div class="form-group col-auto">
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-user"></i></div>
+                                            </div>
+                                            <input type="email" class="form-control" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <div class="input-group col-auto p-0 mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
+                                            <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
+                                            <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
+                                            <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-auto">
+                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -277,99 +338,29 @@ if (!isset($_SESSION['role'])) {
     </script>
 
     <script>
-        //Fetch And Fill Inputs Modal Before Update Presence
-        $(document).on('click', '.editPresenceBtn', function(e) {
+        //Live Search Stagiaire
+        $(document).ready(function() {
+            $("#live_search").keyup(function() {
+                var input = $(this).val();
 
-            var presence_id = $(this).val();
+                //Ignore first character
+                if (input != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: "search.php",
+                        data: {
+                            input: input
+                        },
+                        success: function(response) {
 
-            $.ajax({
-                type: "GET",
-                url: "edit.php?presence_id=" + presence_id,
-                success: function(response) {
-
-                    var res = jQuery.parseJSON(response)
-
-                    if (res.status === 404) {
-
-                        $('#message').removeClass('d-none');
-                        $('#errorMessageUpdate').text(res.message);
-
-                    } else if (res.status === 200) {
-
-                        $('#exampleModalLabel').text(res.data.NOM + " " + res.data.PRENOM)
-                        $('#presence_id').val(res.data.ID_PRESENCE)
-                        $('#m-in').val(res.data.HR_ENTRE_M)
-                        $('#m-out').val(res.data.HR_SORTIE_M)
-                        $('#a-in').val(res.data.HR_ENTRE_A)
-                        $('#a-out').val(res.data.HR_SORTIE_A)
-                        $('#editPresenceModal').modal('show');
-
-                    }
-                }
-            });
-        });
-
-        //Update Presence
-        $(document).on('submit', '#updatePresence', function(e) {
-
-            e.preventDefault();
-
-            var formData = new FormData(this)
-            formData.append("update_presence", true)
-
-            $.ajax({
-                type: "POST",
-                url: "edit.php",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-
-                    var res = jQuery.parseJSON(response);
-
-                    if (res.status === 500) {
-
-                        $('#errorMessageUpdate').removeClass('d-none');
-                        $('#errorMessageUpdate').text(res.message);
-
-                    } else if (res.status === 200) {
-                        $('#errorMessageUpdate').addClass('d-none');
-                        $('#editPresenceModal').modal('hide');
-                        $('#updatePresence')[0].reset();
-
-                        $("#dataTable").load(location.href + " #dataTable");
-                    }
-                }
-            });
-        });
-
-        //Delete Presence
-        $(document).on('click', '.deletePresenceBtn', function(e) {
-
-            e.preventDefault();
-            if (confirm("are you sure u want delete this record?")) {
-                var presence_id = $(this).val();
-                $.ajax({
-                    type: "POST",
-                    url: "delete.php",
-                    data: {
-                        'delete_presence': true,
-                        'presence_id': presence_id,
-                    },
-                    success: function(response) {
-                        var res = jQuery.parseJSON(response);
-
-                        if (res.status === 500) {
-
-                            alertify.error('Error notification message.');
-
-                        } else if (res.status === 200) {
-                            alertify.success('Success notification message.');
-                            $("#dataTable").load(location.href + " #dataTable");
+                            $("#searchResult").removeClass("d-none");
+                            $("#searchResult").html(response)
                         }
-                    }
-                });
-            }
+                    })
+                } else {
+                    $("#searchResult").addClass("d-none");
+                }
+            });
         });
     </script>
 
