@@ -24,6 +24,8 @@ if (!isset($_SESSION['role'])) {
 
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../../resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" /> -->
 
     <!-- Alertify styles -->
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
@@ -126,24 +128,19 @@ if (!isset($_SESSION['role'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Enregistrement des horaires de présence</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Suivi les heures de présence</h1>
 
                     <!-- Saisi -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <div class="row justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Recherche / Saisi</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Recherche et Saisi</h6>
                                 <div class="form-group col-auto p-0 m-0">
                                     <div class="input-group col-auto p-0 position-relative">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-search" style="color:darkgray"></i></div>
                                         </div>
-                                        <input type="search" class="form-control form-control-sm" id="live_search">
-                                        <!-- Dropdown Search result -->
-                                        <div id="searchResult" class="bg-white border d-none" style="position: absolute; top: 42px; width: 220px;">
-                                            <ul class="list-group">
-                                            </ul>
-                                        </div>
+                                        <input type="text" class="form-control form-control-sm" id="autocomplete">
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +154,7 @@ if (!isset($_SESSION['role'])) {
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"><i class="far fa-user"></i></div>
                                             </div>
-                                            <input type="email" class="form-control" id="email">
+                                            <input type="text" class="form-control" id="stagiaire_name">
                                         </div>
                                     </div>
                                     <div class="form-group col-6">
@@ -173,20 +170,17 @@ if (!isset($_SESSION['role'])) {
                                         </div>
                                     </div>
                                     <div class="form-group col-auto" style="margin-top:32px">
-                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                        <button type="button" class="btn btn-primary" id="stagiaire_id"><i class="fas fa-save"></i></button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Stagiaires présents</h1>
-
                     <!-- In Only -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Recherche / Saisi</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Stagiaires présents</h6>
                         </div>
                         <div class="card-body">
                             <form>
@@ -329,6 +323,7 @@ if (!isset($_SESSION['role'])) {
     <script src="../../resources/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="../../resources/vendor/alertify/alertify.min.js"></script>
+    <script src="../../resources/vendor/jquery-ui/jquery-ui.min.js"></script>
 
     <script>
         // Call the dataTables jQuery plugin
@@ -336,30 +331,42 @@ if (!isset($_SESSION['role'])) {
             $('#dataTable').DataTable();
         });
     </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script>
         //Live Search Stagiaire
         $(document).ready(function() {
-            $("#live_search").keyup(function() {
-                var input = $(this).val();
+            $("#autocomplete").keyup(function() {
 
-                //Ignore first character
-                if (input != "") {
-                    $.ajax({
-                        type: "POST",
-                        url: "search.php",
-                        data: {
-                            input: input
-                        },
-                        success: function(response) {
-
-                            $("#searchResult").removeClass("d-none");
-                            $("#searchResult").html(response)
-                        }
-                    })
-                } else {
-                    $("#searchResult").addClass("d-none");
-                }
+                $("#autocomplete").autocomplete({
+                    source: function(request, response) {
+                        // Fetch data
+                        $.ajax({
+                            type: 'POST',
+                            url: "search.php",
+                            dataType: "json",
+                            data: {
+                                search: request.term
+                            },
+                            success: function(data) {
+                                console.log(response)
+                                response(data);
+                            }
+                        });
+                    },
+                    select: function(event, ui) {
+                        // Set selection
+                        $('#autocomplete').val(ui.item.label); // display the selected text
+                        $('#stagiaire_name').val(ui.item.label); // cast full name to input
+                        $("#stagiaire_id").val(ui.item.value); // save id stagiaire to saveBtn
+                        return false;
+                    },
+                    focus: function(event, ui) {
+                        $("#autocomplete").val(ui.item.label);
+                        $("#stagiaire_name").val(ui.item.label);
+                        $("#stagiaire_id").val(ui.item.value);
+                        return false;
+                    },
+                });
             });
         });
     </script>
