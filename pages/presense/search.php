@@ -2,22 +2,28 @@
 // search by name / cin
 require("../../helpers/condb.php");
 
-if (isset($_POST['input'])) {
+if (isset($_POST['search'])) {
 
-    $input = $_POST['input'];
+    $search = mysqli_real_escape_string($con, $_POST['search']);
 
-    $query = "SELECT * FROM stagiaire WHERE NOM LIKE '$input%'";
+    $query = "SELECT * FROM stagiaire WHERE NOM LIKE '$search%'";
     $query_run = mysqli_query($con, $query);
 
     if (mysqli_num_rows($query_run) > 0) {
 
-        foreach ($query_run as $stagiaire) {
-?>
-            <li class="list-group-item"><?= $stagiaire['NOM'] . " " . $stagiaire['PRENOM'] ?></li>
-            <hr class="sidebar-divider my-0">
-<?php
-        }
+        $stagiaire = mysqli_fetch_array($query_run);
+        $res = array();
+
+        $res[] = array("value" => $stagiaire['ID_STAGIAIRE'], "label" => $stagiaire['NOM'] . " " . $stagiaire['PRENOM']);
+        echo json_encode($res);
+        return false;
     } else {
-        echo "<p class='text-danger text-center mt-3'>Aucun stagiaire trouvé</p>";
+
+        $res = [
+            'status' => 404,
+            'message' => "Stagiaire not found",
+        ];
+        echo json_encode($res);
+        return false;
     }
 }
