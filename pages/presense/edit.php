@@ -6,7 +6,7 @@ if (isset($_GET['presence_id'])) {
     $presence_id = mysqli_real_escape_string($con, $_GET['presence_id']);
 
     $query = "SELECT h.*, sr.NOM, sr.PRENOM
-    FROM hr_presence AS h
+    FROM presence AS h
     LEFT JOIN stagiaire AS sr ON h.ID_STAGE = sr.ID_STAGE
     WHERE h.ID_PRESENCE = '$presence_id'";
 
@@ -42,7 +42,7 @@ if (isset($_POST['update_presence'])) {
     $a_in = mysqli_real_escape_string($con, $_POST['a-in']);
     $a_out = mysqli_real_escape_string($con, $_POST['a-out']);
 
-    $query = "UPDATE hr_presence SET HR_ENTRE_M='$m_in', HR_SORTIE_M='$m_out', HR_ENTRE_A='$a_in', HR_SORTIE_A='$a_out' WHERE ID_PRESENCE='$presence_id'";
+    $query = "UPDATE presence SET HR_ENTRE_M='$m_in', HR_SORTIE_M='$m_out', HR_ENTRE_A='$a_in', HR_SORTIE_A='$a_out' WHERE ID_PRESENCE='$presence_id'";
     $query_run = mysqli_query($con, $query);
 
     if ($query_run) {
