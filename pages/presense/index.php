@@ -45,11 +45,9 @@ if (!isset($_SESSION['role'])) {
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./">
+                <img src="../../resources/img/abhoer_md_icon.png" alt="abhoer-icon" style="width: 35%;">
+                <div class="sidebar-brand-text mx-2">ABHOER</div>
             </a>
 
             <!-- Divider -->
@@ -57,9 +55,9 @@ if (!isset($_SESSION['role'])) {
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Accueil</span></a>
             </li>
 
             <!-- Divider -->
@@ -70,38 +68,11 @@ if (!isset($_SESSION['role'])) {
                 Addons
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="show.php">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>les liste des Stagiaires</span></a>
             </li>
 
             <!-- Divider -->
@@ -145,8 +116,8 @@ if (!isset($_SESSION['role'])) {
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <form>
+                        <div class="card-body" id="listeStagiaireIn">
+                            <form id="createPresence">
                                 <div class="form-row justify-content-between">
                                     <div class="form-group col-auto">
                                         <label for="email">Nom Prenom</label>
@@ -154,7 +125,7 @@ if (!isset($_SESSION['role'])) {
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"><i class="far fa-user"></i></div>
                                             </div>
-                                            <input type="text" class="form-control" id="stagiaire_name">
+                                            <input type="text" class="form-control" id="stagiaire_name" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group col-6">
@@ -170,7 +141,7 @@ if (!isset($_SESSION['role'])) {
                                         </div>
                                     </div>
                                     <div class="form-group col-auto" style="margin-top:32px">
-                                        <button type="button" class="btn btn-primary" id="stagiaire_id"><i class="fas fa-save"></i></button>
+                                        <button type="submit" class="btn btn-primary" id="stage_id"><i class="fas fa-save"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -333,8 +304,8 @@ if (!isset($_SESSION['role'])) {
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script>
-        //Live Search Stagiaire
         $(document).ready(function() {
+            //Live Search Stagiaire
             $("#autocomplete").keyup(function() {
 
                 $("#autocomplete").autocomplete({
@@ -348,7 +319,6 @@ if (!isset($_SESSION['role'])) {
                                 search: request.term
                             },
                             success: function(data) {
-                                console.log(response)
                                 response(data);
                             }
                         });
@@ -357,15 +327,51 @@ if (!isset($_SESSION['role'])) {
                         // Set selection
                         $('#autocomplete').val(ui.item.label); // display the selected text
                         $('#stagiaire_name').val(ui.item.label); // cast full name to input
-                        $("#stagiaire_id").val(ui.item.value); // save id stagiaire to saveBtn
+                        $("#stage_id").val(ui.item.value); // save id stagiaire to saveBtn
                         return false;
                     },
                     focus: function(event, ui) {
                         $("#autocomplete").val(ui.item.label);
                         $("#stagiaire_name").val(ui.item.label);
-                        $("#stagiaire_id").val(ui.item.value);
+                        $("#stage_id").val(ui.item.value);
                         return false;
                     },
+                });
+            });
+
+            //Create Presence
+            $(document).on('submit', '#createPresence', function(e) {
+
+                e.preventDefault();
+                var stage_id = e.originalEvent.submitter.value
+
+                var formData = new FormData(this)
+                formData.append("create_presence", true)
+                formData.append("stage_id", stage_id);
+
+                $.ajax({
+                    type: "POST",
+                    url: "create.php",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+
+                        var res = jQuery.parseJSON(response);
+
+                        if (res.status === 500) {
+
+                            alertify.error(res.message);
+                            console.error(res.error)
+
+                        } else if (res.status === 200) {
+
+                            alertify.success(res.message);
+                            $('#autocomplete').val("");
+                            $('#createPresence')[0].reset();
+                            $("#listeStagiaireIn").load(location.href + " #listeStagiaireIn");
+                        }
+                    }
                 });
             });
         });
