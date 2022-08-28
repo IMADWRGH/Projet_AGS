@@ -4,7 +4,7 @@ require("../../helpers/condb.php");
 if (isset($_POST['delete_presence'])) {
     $presence_id = mysqli_real_escape_string($con, $_POST['presence_id']);
 
-    $query = "DELETE FROM hr_presence WHERE ID_PRESENCE='$presence_id'";
+    $query = "DELETE FROM presence WHERE ID_PRESENCE='$presence_id'";
     $query_run = mysqli_query($con, $query);
 
     if ($query_run) {
