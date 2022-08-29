@@ -25,7 +25,6 @@ if (!isset($_SESSION['role'])) {
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
     <link href="../../resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" /> -->
 
     <!-- Alertify styles -->
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
@@ -111,7 +110,7 @@ if (!isset($_SESSION['role'])) {
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-search" style="color:darkgray"></i></div>
                                         </div>
-                                        <input type="search" class="form-control form-control-sm" id="autocomplete">
+                                        <input type="search" class="form-control form-control-sm" id="autocomplete" autofocus>
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +124,7 @@ if (!isset($_SESSION['role'])) {
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"><i class="far fa-user"></i></div>
                                             </div>
-                                            <input type="text" class="form-control" id="stagiaire_name" readonly>
+                                            <input type="text" class="form-control" id="stagiaire_name" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group col-6">
@@ -134,7 +133,7 @@ if (!isset($_SESSION['role'])) {
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"><i class="far fa-clock"></i></div>
                                             </div>
-                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
+                                            <input type="text" class="form-control timepicker" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
                                             <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
                                             <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
                                             <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
@@ -168,7 +167,7 @@ if (!isset($_SESSION['role'])) {
                                 if (mysqli_num_rows($query_run) > 0) {
                                     foreach ($query_run as $presence) {
                                 ?>
-                                        <form>
+                                        <form name="<?= $presence['ID_PRESENCE'] ?>">
                                             <div class="form-row justify-content-between">
                                                 <input type="hidden" name="presence_id" id="presence_id">
                                                 <div class="form-group col-auto">
@@ -184,14 +183,16 @@ if (!isset($_SESSION['role'])) {
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="far fa-clock"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control" name="m-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Entre">
-                                                        <input type="text" class="form-control" name="m-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Sortie">
-                                                        <input type="text" class="form-control" name="a-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Entre">
-                                                        <input type="text" class="form-control" name="a-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Sortie">
+                                                        <input type="text" class="form-control toggle-input" name="m-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Entre" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="m-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Sortie" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="a-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Entre" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="a-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Sortie" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-auto">
-                                                    <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                                    <button type="button" class="btn btn-info"><i class="fas fa-magic"></i></button>
+                                                    <button type="button" class="btn btn-primary editBtn" value="<?= $presence['ID_PRESENCE'] ?>"><i class="fas fa-pen"></i></button>
+                                                    <button type="button" class="btn btn-success d-none saveBtn" value="<?= $presence['ID_PRESENCE'] ?>"><i class="fas fa-save"></i></button>
                                                 </div>
                                             </div>
                                         </form>
@@ -286,14 +287,16 @@ if (!isset($_SESSION['role'])) {
     <script src="../../resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="../../resources/vendor/alertify/alertify.min.js"></script>
     <script src="../../resources/vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../../resources/vendor/jquery-timepicker/jquery.timeAutocomplete.js"></script>
+    <script src="../../resources/vendor/jquery-timepicker/formatters/24hr.js"></script>
 
     <script>
-        // Call the dataTables jQuery plugin
         $(document).ready(function() {
+            // Call the dataTables jQuery plugin
             $('#dataTable').DataTable();
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
     <script>
         $(document).ready(function() {
             //Live Search Stagiaire
@@ -319,12 +322,14 @@ if (!isset($_SESSION['role'])) {
                         $('#autocomplete').val(ui.item.label); // display the selected text
                         $('#stagiaire_name').val(ui.item.label); // cast full name to input
                         $("#stage_id").val(ui.item.value); // save id stagiaire to saveBtn
+                        updateTimePicker();
                         return false;
                     },
                     focus: function(event, ui) {
                         $("#autocomplete").val(ui.item.label);
                         $("#stagiaire_name").val(ui.item.label);
                         $("#stage_id").val(ui.item.value);
+                        updateTimePicker();
                         return false;
                     },
                     response: function(event, ui) {
@@ -363,6 +368,7 @@ if (!isset($_SESSION['role'])) {
                             alertify.error(res.message);
                             console.error(res.error)
                             $("#stage_id").prop('disabled', true);
+                            $('input.timepicker').data('timeAutocomplete').destroy();
 
                         } else if (res.status === 200) {
 
@@ -371,11 +377,30 @@ if (!isset($_SESSION['role'])) {
                             $('#createPresence')[0].reset();
                             $("#stage_id").prop('disabled', true);
                             $("#listeStagiaireIn").load(location.href + " #listeStagiaireIn");
+                            $('input.timepicker').data('timeAutocomplete').destroy();
                         }
                     }
                 });
             });
         });
+
+        // in-only enable inputs when click editBtn
+        $(document).on('click', '.editBtn', function(e) {
+            var presence_id = $(this).val();
+            $("form[name=" + presence_id + "] input.toggle-input").prop('disabled', false);
+            $(".editBtn[value=" + presence_id + "]").hide();
+            $(".saveBtn[value=" + presence_id + "]").removeClass("d-none")
+        });
+
+
+        function updateTimePicker() {
+            $('input.timepicker').timeAutocomplete({
+                formatter: '24hr',
+                auto_complete: false,
+                value: (new Date()).toLocaleTimeString('en-GB'),
+                increment: 1
+            });
+        }
     </script>
 
 </body>
