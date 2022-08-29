@@ -111,12 +111,12 @@ if (!isset($_SESSION['role'])) {
                                         <div class="input-group-prepend">
                                             <div class="input-group-text"><i class="fas fa-search" style="color:darkgray"></i></div>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm" id="autocomplete">
+                                        <input type="search" class="form-control form-control-sm" id="autocomplete">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body" id="listeStagiaireIn">
+                        <div class="card-body">
                             <form id="createPresence">
                                 <div class="form-row justify-content-between">
                                     <div class="form-group col-auto">
@@ -141,7 +141,7 @@ if (!isset($_SESSION['role'])) {
                                         </div>
                                     </div>
                                     <div class="form-group col-auto" style="margin-top:32px">
-                                        <button type="submit" class="btn btn-primary" id="stage_id"><i class="fas fa-save"></i></button>
+                                        <button type="submit" class="btn btn-primary" id="stage_id" disabled><i class="fas fa-save"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -149,66 +149,57 @@ if (!isset($_SESSION['role'])) {
                     </div>
 
                     <!-- In Only -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Stagiaires présents</h6>
-                        </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="form-row justify-content-between">
-                                    <div class="form-group col-auto">
-                                        <label for="email">Nom Prenom</label>
-                                        <div class="input-group col-auto p-0 mb-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="far fa-user"></i></div>
+                    <div id="listeStagiaireIn">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Stagiaires présents</h6>
+                            </div>
+                            <div class="card-body">
+                                <?php
+                                require "../../helpers/condb.php";
+
+                                $query = "SELECT h.*, sr.NOM, sr.PRENOM
+                                        FROM presence AS h
+                                        LEFT JOIN stagiaire AS sr ON h.ID_STAGE = sr.ID_STAGE
+                                        WHERE `DATE` = CURRENT_DATE";
+
+                                $query_run = mysqli_query($con, $query);
+
+                                if (mysqli_num_rows($query_run) > 0) {
+                                    foreach ($query_run as $presence) {
+                                ?>
+                                        <form>
+                                            <div class="form-row justify-content-between">
+                                                <input type="hidden" name="presence_id" id="presence_id">
+                                                <div class="form-group col-auto">
+                                                    <div class="input-group col-auto p-0 mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="far fa-user"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" value="<?= $presence['NOM'] . " " . $presence['PRENOM'] ?>" id="stagiaire_name" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-6">
+                                                    <div class="input-group col-auto p-0 mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="m-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Entre">
+                                                        <input type="text" class="form-control" name="m-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Sortie">
+                                                        <input type="text" class="form-control" name="a-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Entre">
+                                                        <input type="text" class="form-control" name="a-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Sortie">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-auto">
+                                                    <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
+                                                </div>
                                             </div>
-                                            <input type="email" class="form-control" id="email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="m-in">Horaires de présence</label>
-                                        <div class="input-group col-auto p-0 mb-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                            </div>
-                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
-                                            <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
-                                            <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
-                                            <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-auto" style="margin-top:32px">
-                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
-                                    </div>
-                                </div>
-                            </form>
-                            <form>
-                                <div class="form-row justify-content-between">
-                                    <input type="hidden" name="presence_id" id="presence_id">
-                                    <div class="form-group col-auto">
-                                        <div class="input-group col-auto p-0 mb-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="far fa-user"></i></div>
-                                            </div>
-                                            <input type="email" class="form-control" id="email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <div class="input-group col-auto p-0 mb-2">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                            </div>
-                                            <input type="text" class="form-control" name="m-in" id="inlineFormInputGroup" placeholder="M.Entre">
-                                            <input type="text" class="form-control" name="m-out" id="inlineFormInputGroup" placeholder="M.Sortie">
-                                            <input type="text" class="form-control" name="a-in" id="inlineFormInputGroup" placeholder="A.Entre">
-                                            <input type="text" class="form-control" name="a-out" id="inlineFormInputGroup" placeholder="A.Sortie">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-auto">
-                                        <button type="button" class="btn btn-primary"><i class="fas fa-save"></i></button>
-                                    </div>
-                                </div>
-                            </form>
+                                        </form>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </div>
                         </div>
                     </div>
 
@@ -336,6 +327,14 @@ if (!isset($_SESSION['role'])) {
                         $("#stage_id").val(ui.item.value);
                         return false;
                     },
+                    response: function(event, ui) {
+                        if (ui.content.length == 0) {
+                            $("#stage_id").prop('disabled', true);
+
+                        } else if (ui.content.length != 0) {
+                            $("#stage_id").prop('disabled', false);
+                        }
+                    }
                 });
             });
 
@@ -363,12 +362,14 @@ if (!isset($_SESSION['role'])) {
 
                             alertify.error(res.message);
                             console.error(res.error)
+                            $("#stage_id").prop('disabled', true);
 
                         } else if (res.status === 200) {
 
                             alertify.success(res.message);
                             $('#autocomplete').val("");
                             $('#createPresence')[0].reset();
+                            $("#stage_id").prop('disabled', true);
                             $("#listeStagiaireIn").load(location.href + " #listeStagiaireIn");
                         }
                     }
