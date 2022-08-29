@@ -142,7 +142,7 @@ if (!isset($_SESSION['role'])) {
                                                     <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?></td>
                                                     <td class="align-middle">
                                                         <a href="#" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
-                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-info" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
+                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-primary" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
                                                         <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="deletePresenceBtn btn btn-danger"><i class="fas fa-trash"></i></a>
                                                     </td>
                                                 </tr>
