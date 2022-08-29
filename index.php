@@ -59,6 +59,9 @@
                                         <input type="submit" name="submit" value="Login" class="btn btn-primary btn-user btn-block">
                                         <hr>
                                     </form>
+                                      <div class="text-center">
+                                        <a href="forget_password.php"  >forget password ?</a>
+                                    </div>
                                     <div class="text-center">
                                         <p>Agence du Bassin Hydraulique<br>De l'Oum Er Rbia</p>
                                     </div>
