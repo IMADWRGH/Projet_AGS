@@ -14,7 +14,7 @@ if (isset($_POST['create_presence'])) {
     $stage_id = mysqli_real_escape_string($con, $_POST['stage_id']);
 
     $query = "INSERT INTO presence (ID_PRESENCE,`DATE`, HR_ENTRE_M, HR_SORTIE_M, HR_ENTRE_A, HR_SORTIE_A, ID_STAGE)
-    VALUES ('$ID','$DATE','$m_in','$m_out', '$a_in', '$a_out', '$stage_id')";
+    VALUES ('$ID','$DATE', NULLIF('$m_in', ''),NULLIF('$m_out', ''), NULLIF('$a_in', ''), NULLIF('$a_out', ''), '$stage_id')";
     $query_run = mysqli_query($con, $query);
 
     if ($query_run) {
