@@ -167,9 +167,8 @@ if (!isset($_SESSION['role'])) {
                                 if (mysqli_num_rows($query_run) > 0) {
                                     foreach ($query_run as $presence) {
                                 ?>
-                                        <form name="<?= $presence['ID_PRESENCE'] ?>">
+                                        <form name="<?= $presence['ID_PRESENCE'] ?>" id="updatePresenceIn">
                                             <div class="form-row justify-content-between">
-                                                <input type="hidden" name="presence_id" id="presence_id">
                                                 <div class="form-group col-auto">
                                                     <div class="input-group col-auto p-0 mb-2">
                                                         <div class="input-group-prepend">
@@ -190,9 +189,9 @@ if (!isset($_SESSION['role'])) {
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-auto">
-                                                    <button type="button" class="btn btn-info"><i class="fas fa-magic"></i></button>
+                                                    <button type="button" class="btn btn-info magicBtn" value="<?= $presence['ID_PRESENCE'] ?>" disabled><i class="fas fa-magic"></i></button>
                                                     <button type="button" class="btn btn-primary editBtn" value="<?= $presence['ID_PRESENCE'] ?>"><i class="fas fa-pen"></i></button>
-                                                    <button type="button" class="btn btn-success d-none saveBtn" value="<?= $presence['ID_PRESENCE'] ?>"><i class="fas fa-save"></i></button>
+                                                    <button type="submit" class="btn btn-success d-none saveBtn" value="<?= $presence['ID_PRESENCE'] ?>"><i class="fas fa-save"></i></button>
                                                 </div>
                                             </div>
                                         </form>
@@ -220,46 +219,6 @@ if (!isset($_SESSION['role'])) {
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Change Presence Modal-->
-    <div class="modal fade" id="editPresenceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Presence</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form id="updatePresence">
-                    <div class="modal-body">
-                        <div class="alert alert-warning d-none" id="errorMessageUpdate"></div>
-                        <input type="hidden" name="presence_id" id="presence_id">
-                        <div class="mb-3">
-                            <label for="m-in">M.Entree</label>
-                            <input type="text" name="m-in" id="m-in" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="m-out">M.Sortie</label>
-                            <input type="text" name="m-out" id="m-out" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="a-in">A.Entree</label>
-                            <input type="text" name="a-in" id="a-in" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="a-out">A.Entree</label>
-                            <input type="text" name="a-out" id="a-out" class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Modifier</button>
-                        <button class="btn btn-dark" type="button" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -322,14 +281,14 @@ if (!isset($_SESSION['role'])) {
                         $('#autocomplete').val(ui.item.label); // display the selected text
                         $('#stagiaire_name').val(ui.item.label); // cast full name to input
                         $("#stage_id").val(ui.item.value); // save id stagiaire to saveBtn
-                        updateTimePicker();
+                        updateTimePicker('input.timepicker');
                         return false;
                     },
                     focus: function(event, ui) {
                         $("#autocomplete").val(ui.item.label);
                         $("#stagiaire_name").val(ui.item.label);
                         $("#stage_id").val(ui.item.value);
-                        updateTimePicker();
+                        updateTimePicker('input.timepicker');
                         return false;
                     },
                     response: function(event, ui) {
@@ -347,10 +306,10 @@ if (!isset($_SESSION['role'])) {
             $(document).on('submit', '#createPresence', function(e) {
 
                 e.preventDefault();
-                var stage_id = e.originalEvent.submitter.value
+                let stage_id = e.originalEvent.submitter.value;
 
-                var formData = new FormData(this)
-                formData.append("create_presence", true)
+                let formData = new FormData(this);
+                formData.append("create_presence", true);
                 formData.append("stage_id", stage_id);
 
                 $.ajax({
@@ -361,7 +320,7 @@ if (!isset($_SESSION['role'])) {
                     contentType: false,
                     success: function(response) {
 
-                        var res = jQuery.parseJSON(response);
+                        let res = jQuery.parseJSON(response);
 
                         if (res.status === 500) {
 
@@ -384,17 +343,69 @@ if (!isset($_SESSION['role'])) {
             });
         });
 
-        // in-only enable inputs when click editBtn
+        // in-only when click editBtn enable inputs, magicBtn and show saveBtn
         $(document).on('click', '.editBtn', function(e) {
-            var presence_id = $(this).val();
+            let presence_id = $(this).val();
             $("form[name=" + presence_id + "] input.toggle-input").prop('disabled', false);
             $(".editBtn[value=" + presence_id + "]").hide();
-            $(".saveBtn[value=" + presence_id + "]").removeClass("d-none")
+            $(".magicBtn[value=" + presence_id + "]").prop('disabled', false);
+            $(".saveBtn[value=" + presence_id + "]").removeClass("d-none");
+        });
+
+        // Set magicBtn fill next time-input with current time, TODO: autoSave
+        $(document).on('click', '.magicBtn', function(e) {
+            let presence_id = $(this).val();
+            let firstEmptyInput = "form[name=" + presence_id + "] .toggle-input";
+            $(firstEmptyInput)
+                .filter(function() {
+                    return $(this).val() == "";
+                }).first().val((new Date()).toLocaleTimeString('en-GB', { // HH:mm
+                    timeStyle: 'short',
+                }))
+
+            $("form[name=" + presence_id + "]").submit();
+        });
+
+        // 
+        $(document).on('submit', '#updatePresenceIn', function(e) {
+
+            e.preventDefault();
+            // let presence_id = e.originalEvent.submitter.value
+            let presence_id = $(this).attr('name');
+
+            formData = new FormData(this)
+            formData.append("update_presence", true)
+            formData.append("presence_id", presence_id);
+
+            $.ajax({
+                type: "POST",
+                url: "edit.php",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+
+                    let res = jQuery.parseJSON(response);
+
+                    if (res.status === 500) {
+
+                        alertify.error(res.message);
+                        console.error(res.error)
+
+                    } else if (res.status === 200) {
+
+                        alertify.success(res.message);
+                        $("#listeStagiaireIn").load(location.href + " #listeStagiaireIn");
+
+                    }
+                }
+            });
         });
 
 
-        function updateTimePicker() {
-            $('input.timepicker').timeAutocomplete({
+        // TODO: delete timeAutocomplete plugin
+        function updateTimePicker(element) {
+            $(element).timeAutocomplete({
                 formatter: '24hr',
                 auto_complete: false,
                 value: (new Date()).toLocaleTimeString('en-GB'),
