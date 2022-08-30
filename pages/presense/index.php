@@ -16,7 +16,7 @@ if (!isset($_SESSION['role'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>Panel - Sécurité</title>
 
     <!-- Custom fonts for this template -->
     <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -157,7 +157,7 @@ if (!isset($_SESSION['role'])) {
                                 <?php
                                 require "../../helpers/condb.php";
 
-                                $query = "SELECT h.*, sr.NOM, sr.PRENOM
+                                $query = "SELECT ID_PRESENCE, `DATE`, DATE_FORMAT(HR_ENTRE_M, '%H:%i') AS HR_ENTRE_M, DATE_FORMAT(HR_SORTIE_M, '%H:%i') AS HR_SORTIE_M, DATE_FORMAT(HR_ENTRE_A, '%H:%i') AS HR_ENTRE_A, DATE_FORMAT(HR_SORTIE_A, '%H:%i') AS HR_SORTIE_A, OBSERVATION, h.ID_STAGE, NOM, PRENOM
                                         FROM presence AS h
                                         LEFT JOIN stagiaire AS sr ON h.ID_STAGE = sr.ID_STAGE
                                         WHERE `DATE` = CURRENT_DATE";
@@ -183,10 +183,10 @@ if (!isset($_SESSION['role'])) {
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="far fa-clock"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control toggle-input" name="m-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Entre" disabled>
-                                                        <input type="text" class="form-control toggle-input" name="m-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?>" id="inlineFormInputGroup" placeholder="M.Sortie" disabled>
-                                                        <input type="text" class="form-control toggle-input" name="a-in" value="<?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Entre" disabled>
-                                                        <input type="text" class="form-control toggle-input" name="a-out" value="<?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?>" id="inlineFormInputGroup" placeholder="A.Sortie" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="m-in" value="<?= $presence["HR_ENTRE_M"] ?>" id="inlineFormInputGroup" placeholder="--:--" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="m-out" value="<?= $presence["HR_SORTIE_M"] ?>" id="inlineFormInputGroup" placeholder="--:--" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="a-in" value="<?= $presence["HR_ENTRE_A"] ?>" id="inlineFormInputGroup" placeholder="--:--" disabled>
+                                                        <input type="text" class="form-control toggle-input" name="a-out" value="<?= $presence["HR_SORTIE_A"] ?>" id="inlineFormInputGroup" placeholder="--:--" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-auto">
