@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,13 +9,12 @@
     <meta name="author" content="">
     <title>Secrétaire</title>
     <!-- Custom fonts for this template-->
-    <link href="./resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="./resources/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
 </head>
+
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -38,7 +38,7 @@
                     <span>Accueil</span></a>
             </li>
 
-            
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -88,28 +88,25 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        
 
-                        
+
+
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">???</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -139,15 +136,15 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Ajouter un Stagiaire</h1>
                         <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-                    </div> 
+                    </div>
 
                     <!-- Content Row -->
                     <div class="container-fluid vh-100">
-                        <form  action="#" method="post">
+                        <form action="#" method="post">
                             <div class="form-row">
                                 <div class="form-group col-md-2">
                                     <label for="cin"> CIN :</label>
@@ -164,8 +161,8 @@
                                 <div class="form-row">
                                     <label for="sexe">Sexe :</label>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="sexe"  value="M" checked>
-                                        <label class="form-check-label p-3" for="M"> M</label> 
+                                        <input class="form-check-input" type="radio" name="sexe" value="M" checked>
+                                        <label class="form-check-label p-3" for="M"> M</label>
                                         <input class="form-check-input" type="radio" name="sexe" value="F">
                                         <label class="form-check-label" for="F"> F</label>
                                     </div>
@@ -209,11 +206,11 @@
                                     <input type="file" class="custom-file-input" name="file">
                                     <label class="custom-file-label" for="file">Choose file...</label>
                                 </div>
-                              <div class="form-group col-md-2">
-                                <input type="submit" value="Ajouter" class="btn btn-primary" name="ok">
-                              </div>
+                                <div class="form-group col-md-2">
+                                    <input type="submit" value="Ajouter" class="btn btn-primary" name="ok">
+                                </div>
                             </div>
-                           
+
                         </form>
                     </div>
                 </div>
@@ -229,8 +226,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
