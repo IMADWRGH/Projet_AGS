@@ -179,8 +179,7 @@
                                                  <td>'.$prenom.'</td>
                                                  <td>'.$mail.'</td>
                                                  <td>'.$tel.'</td>
-                                                 <td>'.$uv.'</td>
-                                                //  must add icon (:
+                                                 <td>'.$uv.'</td
                                                  <td><button  class="btn text-light"><a href="#">opt1</a></button>
                                                  <button  class="btn "><a href="#">opt2</a></button>
                                                  <button  class="btn "><a href="#">opt3</a></button>

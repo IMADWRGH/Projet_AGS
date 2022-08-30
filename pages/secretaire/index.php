@@ -14,7 +14,30 @@
     <!-- Custom styles for this template-->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
 </head>
-
+<?php
+ require "../../helpers/condb.php";
+ if(isset($_POST["ok"])){
+    $cin=$_POST["cin"];
+    $nom=$_POST["nom"];
+    $prenom=$_POST["prenom"];
+    $sexe=$_POST["sexe"];
+    $mail=$_POST["mail"];
+    $adresse=$_POST["adress"];
+    $uv=$_POST["uv"];
+    $tel=$_POST["tel"];
+    $ville=$_POST["ville"];
+    $niveau=$_POST["niveau"];
+    $req="INSERT INTO `stagiaire` VALUES('$cin',' $nom','$prenom',' $sexe','$tel','$mail','$ville','$adresse','$uv','$niveau')";
+    $result=mysqli_query($con,$req);
+    if($result){
+        echo '<script>alert("Success")</script>';
+        
+    }else{
+          echo '<script>alert("Fail")</script>';
+          
+    }
+ }
+?>
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
