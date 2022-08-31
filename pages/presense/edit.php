@@ -42,14 +42,14 @@ if (isset($_POST['update_presence'])) {
     $a_in = mysqli_real_escape_string($con, $_POST['a-in']);
     $a_out = mysqli_real_escape_string($con, $_POST['a-out']);
 
-    $query = "UPDATE presence SET HR_ENTRE_M='$m_in', HR_SORTIE_M='$m_out', HR_ENTRE_A='$a_in', HR_SORTIE_A='$a_out' WHERE ID_PRESENCE='$presence_id'";
+    $query = "UPDATE presence SET HR_ENTRE_M=NULLIF('$m_in', ''), HR_SORTIE_M=NULLIF('$m_out', ''), HR_ENTRE_A=NULLIF('$a_in', ''), HR_SORTIE_A=NULLIF('$a_out', '') WHERE ID_PRESENCE='$presence_id'";
     $query_run = mysqli_query($con, $query);
 
     if ($query_run) {
 
         $res = [
             'status' => 200,
-            'message' => "Presence ('$presence_id') Updated Successfully",
+            'message' => "Updated Successfully",
         ];
         echo json_encode($res);
         return false;
@@ -57,7 +57,8 @@ if (isset($_POST['update_presence'])) {
 
         $res = [
             'status' => 500,
-            'message' => "Presence ('$presence_id') Not Updated",
+            'message' => "Failed to update",
+            'error' => mysqli_error($con),
         ];
         echo json_encode($res);
         return false;

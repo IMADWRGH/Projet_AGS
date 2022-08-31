@@ -142,7 +142,7 @@ if (!isset($_SESSION['role'])) {
                                                     <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?></td>
                                                     <td class="align-middle">
                                                         <a href="#" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
-                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-info" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
+                                                        <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="editPresenceBtn btn btn-primary" data-toggle="modal" data-target="#editPresenceModal"><i class="fas fa-pen"></i></button>
                                                         <button type="button" value="<?= $presence["ID_PRESENCE"]; ?>" class="deletePresenceBtn btn btn-danger"><i class="fas fa-trash"></i></a>
                                                     </td>
                                                 </tr>
@@ -250,14 +250,14 @@ if (!isset($_SESSION['role'])) {
         //Fetch And Fill Inputs Modal Before Update Presence
         $(document).on('click', '.editPresenceBtn', function(e) {
 
-            var presence_id = $(this).val();
+            let presence_id = $(this).val();
 
             $.ajax({
                 type: "GET",
                 url: "edit.php?presence_id=" + presence_id,
                 success: function(response) {
 
-                    var res = jQuery.parseJSON(response)
+                    let res = jQuery.parseJSON(response)
 
                     if (res.status === 404) {
 
@@ -284,7 +284,7 @@ if (!isset($_SESSION['role'])) {
 
             e.preventDefault();
 
-            var formData = new FormData(this)
+            let formData = new FormData(this)
             formData.append("update_presence", true)
 
             $.ajax({
@@ -295,7 +295,7 @@ if (!isset($_SESSION['role'])) {
                 contentType: false,
                 success: function(response) {
 
-                    var res = jQuery.parseJSON(response);
+                    let res = jQuery.parseJSON(response);
 
                     if (res.status === 500) {
 
@@ -318,7 +318,7 @@ if (!isset($_SESSION['role'])) {
 
             e.preventDefault();
             if (confirm("are you sure u want delete this record?")) {
-                var presence_id = $(this).val();
+                let presence_id = $(this).val();
                 $.ajax({
                     type: "POST",
                     url: "delete.php",
@@ -327,7 +327,7 @@ if (!isset($_SESSION['role'])) {
                         'presence_id': presence_id,
                     },
                     success: function(response) {
-                        var res = jQuery.parseJSON(response);
+                        let res = jQuery.parseJSON(response);
 
                         if (res.status === 500) {
 

@@ -37,30 +37,20 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Gestion Des Stagiaires</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Récupérer mot de passe</h1>
                                     </div>
-
-                                    <!-- Show Errors Login -->
-                                    <?php if (isset($_GET['error'])) { ?>
-
-                                        <div class="alert alert-danger" role="alert">
-                                            <?= $_GET['error'] ?>
-                                        </div>
-
-                                    <?php } ?>
-
-                                    <form action="./helpers/auth.php" method="post" class="user">
+                                    <form action="./helpers/recover_pass_mail.php" method="post" class="user">
                                         <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Nom De Utilisateur" required>
+                                            <input type="text" name="username" class="form-control form-control-user"  placeholder="Nom utilisateur..." required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Mot De Passe" required>
+                                            <input type="mail" name="mail" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="E-mail..." required>
                                         </div>
-                                        <input type="submit" name="submit" value="Login" class="btn btn-primary btn-user btn-block">
+                                        <input type="submit" name="reset" value="Reset password" class="btn btn-primary btn-user btn-block">
                                         <hr>
                                     </form>
                                       <div class="text-center">
-                                        <a href="forget_password.php"  >forget password ?</a>
+                                        <a href="index.php"  >Login </a>
                                     </div>
                                     <div class="text-center">
                                         <p>Agence du Bassin Hydraulique<br>De l'Oum Er Rbia</p>
