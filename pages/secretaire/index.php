@@ -66,14 +66,14 @@ if (!isset($_SESSION['role'])) {
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="index2.php">
+                <a class="nav-link" href="list.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>les liste des Stagiaires</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="status.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>les états des demandes</span></a>
             </li>
