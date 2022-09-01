@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2022 at 10:17 PM
+-- Generation Time: Sep 01, 2022 at 07:43 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.0.19
 
@@ -39,21 +39,52 @@ CREATE TABLE `contination` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `departement`
+--
+
+CREATE TABLE `departement` (
+  `ID_DEPARTEMENT` char(10) NOT NULL,
+  `NOM` varchar(30) NOT NULL,
+  `CHEF` varchar(30) NOT NULL,
+  `ETAT` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `departement`
+--
+
+INSERT INTO `departement` (`ID_DEPARTEMENT`, `NOM`, `CHEF`, `ETAT`) VALUES
+('DP1', 'IT', 'KHALED', 1),
+('DP2', 'DPH', 'KAMAL', 1),
+('DP3', 'RH', 'ASMA', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dossier`
 --
 
 CREATE TABLE `dossier` (
   `ID_DOSSIER` char(10) NOT NULL,
-  `CV` int(11) NOT NULL,
-  `PHOTO` int(11) NOT NULL,
-  `DEMANDE` int(11) NOT NULL,
-  `ASSURANCE` int(11) NOT NULL,
-  `COPY_CIN` int(11) NOT NULL,
-  `DATE_DEPOSE` date NOT NULL,
+  `CV` char(20) DEFAULT NULL,
+  `PHOTO` char(20) DEFAULT NULL,
+  `DEMANDE` char(20) DEFAULT NULL,
+  `ASSURANCE` char(20) DEFAULT NULL,
+  `COPY_CIN` char(20) DEFAULT NULL,
+  `DATE_DEPOSE` datetime NOT NULL,
   `STATUT` char(15) NOT NULL,
-  `AUTRE_FICHERS` int(11) NOT NULL,
+  `AUTRE_FICHERS` char(20) DEFAULT NULL,
   `ID_STAGE` char(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dossier`
+--
+
+INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `ID_STAGE`) VALUES
+('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'accepté', NULL, 'T1'),
+('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'non traité', NULL, 'T2'),
+('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'en attendant', NULL, 'T3');
 
 -- --------------------------------------------------------
 
@@ -117,8 +148,10 @@ CREATE TABLE `presence` (
 --
 
 INSERT INTO `presence` (`ID_PRESENCE`, `DATE`, `HR_ENTRE_M`, `HR_SORTIE_M`, `HR_ENTRE_A`, `HR_SORTIE_A`, `OBSERVATION`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
-('P1', '2022-08-29', '08:00:00', '12:00:00', '13:00:00', '17:12:00', '', 'T1', '2022-08-30 13:38:52', '2022-08-30 17:04:04'),
-('P2', '2022-08-30', '16:44:00', '16:45:00', '16:48:00', '18:48:00', '', 'T2', '2022-08-30 13:44:37', '2022-08-30 17:10:58');
+('P1', '2022-08-29', '08:00:00', '12:00:00', '13:00:00', '17:17:00', '', 'T1', '2022-08-30 13:38:52', '2022-08-30 22:49:06'),
+('P2', '2022-08-30', '16:44:00', '16:45:00', '16:48:00', '18:48:00', '', 'T2', '2022-08-30 13:44:37', '2022-08-30 17:10:58'),
+('P3', '2022-08-30', '22:46:00', '22:47:00', '14:45:00', '22:47:00', '', 'T1', '2022-08-30 21:46:27', '2022-08-30 22:47:29'),
+('P4', '2022-09-01', '06:35:00', '06:36:00', '06:42:00', NULL, '', 'T1', '2022-09-01 05:35:34', '2022-09-01 06:42:18');
 
 -- --------------------------------------------------------
 
@@ -130,17 +163,19 @@ CREATE TABLE `stage` (
   `ID_STAGE` char(10) NOT NULL,
   `DATE_D` date NOT NULL,
   `DATE_F` date NOT NULL,
-  `ENCADRENT` char(50) NOT NULL,
-  `DEP` char(50) NOT NULL
+  `TYPE` char(30) DEFAULT NULL,
+  `ENCADRENT` char(50) DEFAULT NULL,
+  `ID_DEPARTEMENT` char(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stage`
 --
 
-INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `ENCADRENT`, `DEP`) VALUES
-('T1', '2022-08-01', '2022-08-31', 'Khaled', 'IT'),
-('T2', '2022-08-01', '2022-09-30', 'achraf', 'DPH');
+INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRENT`, `ID_DEPARTEMENT`) VALUES
+('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1'),
+('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2'),
+('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3');
 
 -- --------------------------------------------------------
 
@@ -169,7 +204,8 @@ CREATE TABLE `stagiaire` (
 
 INSERT INTO `stagiaire` (`ID_STAGIAIRE`, `CIN`, `NOM`, `PRENOM`, `SEXE`, `TEL`, `EMAIL`, `VILLE`, `ADRESSE`, `ETABLISSEMENT`, `NIVEAU`, `ID_STAGE`) VALUES
 ('S1', 'IA111222', 'MBARKI', 'BIO', 'M', '0611223344', 'test@test.com', 'BENI MELLAL', 'TAGZIRT', 'ECOSIG', 'BAC+2', 'T1'),
-('S2', 'I333222', 'TIFU', 'OMAR', 'F', '0622334455', 'imar@omar.com', 'AGADIR', 'AOURIR', 'ISTA', 'BAC+2', 'T2');
+('S2', 'I333222', 'TIFU', 'OMAR', 'F', '0622334455', 'imar@omar.com', 'AGADIR', 'AOURIR', 'ISTA', 'BAC+2', 'T2'),
+('S3', 'IA1122', 'KHADIJA', 'HILALI', 'F', '0611223344', 'a@b.com', 'casa', 'CT02', 'FP', 'Bac+3', 'T3');
 
 -- --------------------------------------------------------
 
@@ -206,6 +242,12 @@ ALTER TABLE `contination`
   ADD KEY `ID_STAGE` (`ID_STAGE`);
 
 --
+-- Indexes for table `departement`
+--
+ALTER TABLE `departement`
+  ADD PRIMARY KEY (`ID_DEPARTEMENT`);
+
+--
 -- Indexes for table `dossier`
 --
 ALTER TABLE `dossier`
@@ -237,7 +279,8 @@ ALTER TABLE `presence`
 -- Indexes for table `stage`
 --
 ALTER TABLE `stage`
-  ADD PRIMARY KEY (`ID_STAGE`);
+  ADD PRIMARY KEY (`ID_STAGE`),
+  ADD KEY `ID_DEPARTEMENT` (`ID_DEPARTEMENT`);
 
 --
 -- Indexes for table `stagiaire`
