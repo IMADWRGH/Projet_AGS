@@ -20,11 +20,6 @@ if (!isset($_SESSION['role'])) {
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
     <link href="../../resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-    <!-- Alertify styles -->
-    <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
-    <link rel="stylesheet" href="../../resources/vendor/alertify/css/themes/bootstrap.css" />
-    <!-- Fileinput plugin styling CSS file -->
-    <link rel="stylesheet" href="../../resources/vendor/input-file/css/fileinput.min.css" />
     <!-- Font Awesome  -->
     <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
@@ -106,7 +101,6 @@ if (!isset($_SESSION['role'])) {
 
                     <div class="row">
 
-
                         <?php
                         // Count STATUT query (Ex: en attande:4, accepte:2...)
                         require "../../helpers/condb.php";
@@ -167,16 +161,7 @@ if (!isset($_SESSION['role'])) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                                 Refusé</div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $statut ? $statut['ref_count'] : "" ?></div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $statut ? $statut['ref_count'] : "" ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-times fa-2x text-gray-300"></i>
@@ -209,6 +194,59 @@ if (!isset($_SESSION['role'])) {
                     <h1 class="h3 mb-2 text-gray-800">Process des demandes</h1>
 
                     <div class="row">
+
+                        <div class="card shadow mb-4 flex-fill">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item  d-flex justify-content-between align-items-center">
+                                            <div class="col flex-fill p-0 font-weight-bold">Nom Prenom</div>
+                                            <div class="col flex-fill p-0 font-weight-bold">Date Depose</div>
+                                            <div class="col flex-fill p-0 font-weight-bold">Department</div>
+                                            <div class="col-md-2 p-0 font-weight-bold">Statut</div>
+                                        </li>
+                                        <?php
+                                        $query = "SELECT sr.NOM, sr.PRENOM, d.DATE_DEPOSE, d.STATUT, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
+                                        FROM stage AS st
+                                        LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = st.ID_STAGE
+                                        LEFT JOIN dossier AS d ON d.ID_STAGE = st.ID_STAGE
+                                        LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
+                                        LIMIT 30";
+                                        $query_run = mysqli_query($con, $query);
+                                        if (mysqli_num_rows($query_run) > 0) {
+                                            foreach ($query_run as $result) {
+                                                $color = $result['STATUT'];
+                                                switch ($color) {
+                                                    case 'accepte':
+                                                        $color = 'success';
+                                                        break;
+                                                    case 'en attente':
+                                                        $color = 'warning';
+                                                        break;
+                                                    case 'refuse':
+                                                        $color = 'danger';
+                                                        break;
+                                                    case 'non traite':
+                                                        $color = 'dark';
+                                                        break;
+                                                }
+                                        ?>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div class="col flex-fill p-0"><?= $result['NOM'] . " " . $result['PRENOM'] ?></div>
+                                                    <div class="col flex-fill p-0"><?= date("d-m-y H:i", strtotime($result['DATE_DEPOSE'])) ?></div>
+                                                    <div class="col flex-fill p-0"><?= $result['DP_NOM'] ?></div>
+                                                    <div class="col-md-2 p-0">
+                                                        <span class="badge rounded-pill badge-<?= $color ?> p-2"><?= ucfirst($result['STATUT']) ?></span>
+                                                    </div>
+                                                </li>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
