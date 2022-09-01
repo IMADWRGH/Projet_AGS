@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
 
     if (empty($username)) {
         header("location: ../index.php?error=Username is required");
-    } elseif (empty($username)) {
+    } elseif (empty($pwd)) {
         header("location: ../index.php?error=Password is required");
     }
 
