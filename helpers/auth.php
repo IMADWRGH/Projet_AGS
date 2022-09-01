@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
 
     if (empty($username)) {
         header("location: ../index.php?error=Username is required");
-    } elseif (empty($username)) {
+    } elseif (empty($pwd)) {
         header("location: ../index.php?error=Password is required");
     }
 
@@ -27,6 +27,11 @@ if (isset($_POST['submit'])) {
             $_SESSION['role'] = $row['ROLE'];
             $_SESSION['username'] = $row['USERNAME'];
             header("location: ../pages/presense");
+            die;
+        }else{
+            $_SESSION['role'] = $row['ROLE'];
+            $_SESSION['username'] = $row['USERNAME'];
+            header("location: ../pages/secretaire");
             die;
         }
     } else {
