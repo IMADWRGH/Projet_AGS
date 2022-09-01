@@ -124,23 +124,17 @@ if (!isset($_SESSION['role'])) {
 
                                 </div>
                                 <div class="form-row">
+                                    <div class="form-group col-xs-4 col-md-3">
+                                        <label for="tel">Tel :</label>
+                                        <input type="tel" class="form-control" name="tel" placeholder="+212">
+                                    </div>
                                     <div class="form-group col-xs-4 flex-fill">
                                         <label for="mail">Email :</label>
                                         <input type="email" class="form-control" name="email" placeholder="Email...">
                                     </div>
-                                    <div class="form-group col-xs-4 col-md-5">
-                                        <label for="tel">Tel :</label>
-                                        <input type="tel" class="form-control" name="tel" placeholder="+212">
-                                    </div>
-                                </div>
-                                <div class="form-row">
                                     <div class="form-group col-xs-4 flex-fill">
-                                        <label for="adress">Adresse :</label>
-                                        <input type="text" class="form-control" name=" adress" placeholder="Rue 45 bloc 8...">
-                                    </div>
-                                    <div class="form-group col-xs-4 col-md-5">
                                         <label class="control" for="ville">Ville :</label>
-                                        <select class="custom-select mr-sm-2" name="ville">
+                                        <select class="custom-select" name="ville">
                                             <option selected>Choose...</option>
                                             <option value="fes">Fes</option>
                                             <option value="bm">BM</option>
@@ -149,14 +143,9 @@ if (!isset($_SESSION['role'])) {
                                     </div>
                                 </div>
                                 <div class="form-row">
-
-                                    <div class="form-group col-xs-4 col-md-4">
-                                        <label for="niveau">Niveau</label>
-                                        <input type="text" class="form-control" name="niveau" placeholder="Bac+...">
-                                    </div>
                                     <div class="form-group col-xs-4 flex-fill">
-                                        <label for="uv">Etablissement</label>
-                                        <input type="text" class="form-control" name="uv" placeholder="université...">
+                                        <label for="adress">Adresse :</label>
+                                        <input type="text" class="form-control" name=" adress" placeholder="Rue 45 bloc 8...">
                                     </div>
                                     <div class="form-group col-xs-4 col-md-auto">
                                         <label class="control-label mb-3">Sexe :</label>
@@ -170,6 +159,44 @@ if (!isset($_SESSION['role'])) {
                                                 <label class="form-check-label pl-2" for="sexe">Feminim</label>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <label for="niveau">Niveau</label>
+                                        <input type="text" class="form-control" name="niveau" placeholder="Bac+...">
+                                    </div>
+                                    <div class="form-group col-xs-4 flex-fill">
+                                        <label for="uv">Etablissement</label>
+                                        <input type="text" class="form-control" name="uv" placeholder="université...">
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <label for="dep">Deparetment :</label>
+                                        <select class="form-control mr-sm-2" name="dep">
+                                            <option selected>Choose...</option>
+                                            <option value="DP1">IT</option>
+                                            <option value="DP2">DPH</option>
+                                            <option value="DP3">RH</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <label for="startDate">Date Début :</label>
+                                        <input type="date" class="form-control" name="startDate" placeholder="Bac+..." require>
+                                    </div>
+                                    <div class="form-group col-xs-4 col-md-4">
+                                        <label for="endDate">Date Fin :</label>
+                                        <input type="date" class="form-control" name="endDate" placeholder="université..." require>
+                                    </div>
+                                    <div class="form-group col-xs-4 flex-fill">
+                                        <label for="stageType">Type De Stage :</label>
+                                        <select class="form-control mr-sm-2" name="stageType">
+                                            <option selected>Choose...</option>
+                                            <option value="init">Stage d&rsquo;initiation</option>
+                                            <option value="app">Stage d&rsquo;application</option>
+                                            <option value="pfe">Stage de fin d&rsquo;études</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -245,37 +272,6 @@ if (!isset($_SESSION['role'])) {
     </div>
 
     <?php include("../includes/scripts.php"); ?>
-
-    <!-- buffer.min.js and filetype.min.js are necessary in the order listed for advanced mime type parsing and more correct
-     preview. This is a feature available since v5.5.0 and is needed if you want to ensure file mime type is parsed 
-     correctly even if the local file's extension is named incorrectly. This will ensure more correct preview of the
-     selected file (note: this will involve a small processing overhead in scanning of file contents locally). If you 
-     do not load these scripts then the mime type parsing will largely be derived using the extension in the filename
-     and some basic file content parsing signatures. -->
-    <script src="../../resources/vendor/input-file/js/plugins/buffer.min.js" type="text/javascript"></script>
-    <script src="../../resources/vendor/input-file/js/plugins/filetype.min.js" type="text/javascript"></script>
-
-    <!-- piexif.min.js is needed for auto orienting image files OR when restoring exif data in resized images and when you
-    wish to resize images before upload. This must be loaded before fileinput.min.js -->
-    <script src="../../resources/vendor/input-file/js/plugins/piexif.min.js" type="text/javascript"></script>
-
-    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. 
-    This must be loaded before fileinput.min.js -->
-    <script src="../../resources/vendor/input-file/js/plugins/sortable.min.js" type="text/javascript"></script>
-
-    <!-- bootstrap.bundle.min.js below is needed if you wish to zoom and preview file content in a detail modal
-    dialog. bootstrap 5.x or 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
-    <script src="../../resources/vendor/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
-    <!-- the main fileinput plugin script JS file -->
-    <script src="../../resources/vendor/input-file/js/fileinput.min.js"></script>
-
-    <!-- following theme script is needed to use the Font Awesome 5.x theme (`fa5`). Uncomment if needed. -->
-    <script src="../../resources/vendor/input-file/themes/fa5/theme.min.js"></script>
-
-    <!-- optionally if you need translation for your language then include the locale file as mentioned below (replace LANG.js with your language locale) -->
-    <script src="../../resources/vendor/input-file/js/locales/fr.js"></script>
-
 </body>
 
 </html>
