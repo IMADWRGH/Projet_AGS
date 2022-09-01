@@ -19,8 +19,13 @@ if (isset($_POST["ok"])) {
     $tel = $_POST["tel"];
     $ville = $_POST["ville"];
     $niveau = $_POST["niveau"];
+    $startDate = $_POST["startDate"];
+    $endDate = $_POST["endDate"];
+    $stageType = $_POST["stageType"];
+    $department = $_POST["dep"];
 
-    $stageReq = "INSERT INTO stage (ID_STAGE) VALUES ('$newStage_id');";
+    $stageReq = "INSERT INTO stage (ID_STAGE, DATE_D, DATE_F, `TYPE`, ID_DEPARTEMENT) 
+            VALUES ('$newStage_id', '$startDate', '$endDate', '$stageType', '$department');";
     $dossierReq = "INSERT INTO dossier (ID_DOSSIER, CV, DEMANDE, ASSURANCE, DATE_DEPOSE, STATUT, ID_STAGE)
             VALUES ('$newDossier_id', '$fileCv', '$fileDe', '$fileAs', NOW(), 'en attendant', '$newStage_id');"; //Skipped Col : PHOTO, COPY_CIN, AUTRE_FICHERS	
     $stagiaireReq = "INSERT INTO stagiaire (ID_STAGIAIRE, CIN, NOM, PRENOM, SEXE, TEL, EMAIL, VILLE, ADRESSE, ETABLISSEMENT, NIVEAU, ID_STAGE)
