@@ -105,9 +105,9 @@ if (!isset($_SESSION['role'])) {
                     <h1 class="h3 mb-2 text-gray-800">Ajouter Un Stagiaire</h1>
 
                     <!-- Content Row -->
-                    <div class="row">
-                        <div class="col">
-                            <form>
+                    <form enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col">
                                 <div class="form-row">
                                     <div class="form-group col-xs-4 col-md-3">
                                         <label for="cin" class="control-label"> CIN :</label>
@@ -172,23 +172,47 @@ if (!isset($_SESSION['role'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-row justify-content-between">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-row">
                                     <div class="form-group col-xs-4 col-md-auto ml-1 flex-fill">
-                                        <input type="file" class="file-input" name="attchments" id="inputFile">
-                                        <!-- <label class="file-label" for="attchments">Choose file...</label> -->
+                                        <label class="file-label" for="cv">Assurance :</label>
+                                        <input type="file" class="file-input border mb-2" name="cv" id="inputFile">
                                     </div>
-
                                 </div>
-                            </form>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-row justify-content-between">
-                                <div class="form-group col-xs-4">
-                                    <input type="submit" value="Ajouter" class="btn btn-primary btn-block" name="ok">
+                                <div class="form-row">
+                                    <div class="form-group col-xs-4 col-md-auto ml-1 flex-fill">
+                                        <label class="file-label" for="cv">Demande :</label>
+                                        <input type="file" class="file-input border mb-2" name="cv" id="inputFile">
+                                    </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-xs-4 col-md-auto ml-1 flex-fill">
+                                        <label class="file-label" for="cv">CV :</label>
+                                        <input type="file" class="file-input border" name="cv" id="inputFile">
+                                    </div>
+                                </div>
+                                <p><i class="fas fa-file-code fa-lg"></i> type autorisé :
+                                    <small class="badge badge-danger" style="background-color: rgba( 220, 53, 69, 0.7);">PDF</small>
+                                    <small class="badge badge-primary" style="background-color: rgba( 0, 123, 255, 0.7);">DOCX</small>
+                                    <small class="badge badge-success" style="background-color: rgba( 40, 167, 69, 0.7);">IMAGE</small>
+                                </p>
+                                <p><i class="fas fa-file-archive fa-lg"></i> taille maximale :
+                                    <small class="badge badge-success" style="background-color: rgba( 23, 162, 184, 0.7);">5 MB</small>
+                                </p>
                             </div>
                         </div>
-                    </div>
+                        <div class="row justify-content-end align-items-end">
+                            <!-- <div class="form-row justify-content-end align-items-end"> -->
+                            <div class="form-group col-xs-4 align-self-end">
+                                <button type="submit" class="btn btn-primary mr-2" name="ok">Ajouter</button>
+                            </div>
+                            <div class="form-group col-xs-4">
+                                <button type="reset" class="btn btn-outline-dark" name="ok">Cancel</button>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -247,21 +271,10 @@ if (!isset($_SESSION['role'])) {
     <script src="../../resources/vendor/input-file/js/fileinput.min.js"></script>
 
     <!-- following theme script is needed to use the Font Awesome 5.x theme (`fa5`). Uncomment if needed. -->
-    <!-- script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/themes/fa5/theme.min.js"></script -->
+    <script src="../../resources/vendor/input-file/themes/fa5/theme.min.js"></script>
 
     <!-- optionally if you need translation for your language then include the locale file as mentioned below (replace LANG.js with your language locale) -->
     <script src="../../resources/vendor/input-file/js/locales/fr.js"></script>
-    <script src="../../resources/vendor/input-file/themes/fa5/theme.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#inputFile').fileinput({
-                theme: "fa5",
-                'showUpload': false,
-                'previewFileType': 'any'
-            });
-        });
-    </script>
 
 </body>
 
