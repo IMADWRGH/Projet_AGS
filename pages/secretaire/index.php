@@ -105,7 +105,7 @@ if (!isset($_SESSION['role'])) {
                     <h1 class="h3 mb-2 text-gray-800">Ajouter Un Stagiaire</h1>
 
                     <!-- Content Row -->
-                    <form enctype="multipart/form-data">
+                    <form method="POST" action="create.php" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col">
                                 <div class="form-row">
@@ -126,7 +126,7 @@ if (!isset($_SESSION['role'])) {
                                 <div class="form-row">
                                     <div class="form-group col-xs-4 flex-fill">
                                         <label for="mail">Email :</label>
-                                        <input type="email" class="form-control" name="mail" placeholder="Email...">
+                                        <input type="email" class="form-control" name="email" placeholder="Email...">
                                     </div>
                                     <div class="form-group col-xs-4 col-md-5">
                                         <label for="tel">Tel :</label>
@@ -159,15 +159,15 @@ if (!isset($_SESSION['role'])) {
                                         <input type="text" class="form-control" name="uv" placeholder="université...">
                                     </div>
                                     <div class="form-group col-xs-4 col-md-auto">
-                                        <label for="sexe" class="control-label mb-3">Sexe :</label>
+                                        <label class="control-label mb-3">Sexe :</label>
                                         <div class="radio pl-1">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="sexe" id="inlineRadio1" value="M" style="transform: scale(1.5);">
-                                                <label class=" form-check-label pl-2" for="inlineRadio1">Masculin</label>
+                                                <label class=" form-check-label pl-2" for="sexe">Masculin</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="sexe" id="inlineRadio2" value="F" style="transform: scale(1.5);">
-                                                <label class="form-check-label pl-2" for="inlineRadio2">Feminim</label>
+                                                <label class="form-check-label pl-2" for="sexe">Feminim</label>
                                             </div>
                                         </div>
                                     </div>
@@ -176,14 +176,14 @@ if (!isset($_SESSION['role'])) {
                             <div class="col-md-4">
                                 <div class="form-row">
                                     <div class="form-group col-xs-4 col-md-auto ml-1 flex-fill">
-                                        <label class="file-label" for="cv">Assurance :</label>
-                                        <input type="file" class="file-input border mb-2" name="cv" id="inputFile">
+                                        <label class="file-label" for="assurance">Assurance :</label>
+                                        <input type="file" class="file-input border mb-2" name="assurance" id="inputFile">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-xs-4 col-md-auto ml-1 flex-fill">
-                                        <label class="file-label" for="cv">Demande :</label>
-                                        <input type="file" class="file-input border mb-2" name="cv" id="inputFile">
+                                        <label class="file-label" for="demande">Demande :</label>
+                                        <input type="file" class="file-input border mb-2" name="demande" id="inputFile">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -192,12 +192,12 @@ if (!isset($_SESSION['role'])) {
                                         <input type="file" class="file-input border" name="cv" id="inputFile">
                                     </div>
                                 </div>
-                                <p><i class="fas fa-file-code fa-lg"></i> type autorisé :
+                                <p class="pl-2"><i class="fas fa-file-code fa-lg"></i> type autorisé :
                                     <small class="badge badge-danger" style="background-color: rgba( 220, 53, 69, 0.7);">PDF</small>
                                     <small class="badge badge-primary" style="background-color: rgba( 0, 123, 255, 0.7);">DOCX</small>
                                     <small class="badge badge-success" style="background-color: rgba( 40, 167, 69, 0.7);">IMAGE</small>
                                 </p>
-                                <p><i class="fas fa-file-archive fa-lg"></i> taille maximale :
+                                <p class="pl-2"><i class="fas fa-file-archive fa-lg"></i> taille maximale :
                                     <small class="badge badge-success" style="background-color: rgba( 23, 162, 184, 0.7);">5 MB</small>
                                 </p>
                             </div>
