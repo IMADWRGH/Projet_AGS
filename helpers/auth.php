@@ -28,6 +28,11 @@ if (isset($_POST['submit'])) {
             $_SESSION['username'] = $row['USERNAME'];
             header("location: ../pages/presense");
             die;
+        }else{
+            $_SESSION['role'] = $row['ROLE'];
+            $_SESSION['username'] = $row['USERNAME'];
+            header("location: ../pages/secretaire");
+            die;
         }
     } else {
         header("location: ../index.php?error=Incorrect username or password");

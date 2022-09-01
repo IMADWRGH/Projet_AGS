@@ -9,7 +9,7 @@ function generateID($prefix, $table)
 
     if (mysqli_num_rows($query_run) > 0) {
         if ($row = mysqli_fetch_assoc($query_run)) {
-            $uid = $row['ID_PRESENCE'];
+            $uid = $row[$name_id];
             $get_numbers = preg_replace("/[^0-9]/", "", $uid);
             $id_increase = $get_numbers + 1;
             $id = $prefix . $id_increase;

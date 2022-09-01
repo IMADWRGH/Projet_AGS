@@ -19,7 +19,8 @@ if (isset($_POST['delete_presence'])) {
 
         $res = [
             'status' => 500,
-            'message' => "Presence ('$presence_id') Not Deleted",
+            'message' => "Failed to update",
+            'error' => mysqli_error($con),
         ];
         echo json_encode($res);
         return false;

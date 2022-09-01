@@ -13,7 +13,7 @@ if(isset($_POST["reset"])){
         die;
     }else{
        
-         header("location: ../Reset_password.php");
+         header("location: ../Recovre_password.php");
             die;
     }
 } 

@@ -1,0 +1,8 @@
+/uploads/cv/*
+!.gitkeep
+/uploads/demande/*
+!.gitkeep
+/uploads/assurance/*
+!.gitkeep
+/uploads/autres/*
+!.gitkeep
