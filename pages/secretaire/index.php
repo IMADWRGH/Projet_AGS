@@ -23,8 +23,6 @@ if (!isset($_SESSION['role'])) {
     <!-- Alertify styles -->
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/themes/bootstrap.css" />
-    <!-- Fileinput plugin styling CSS file -->
-    <link rel="stylesheet" href="../../resources/vendor/input-file/css/fileinput.min.css" />
     <!-- Font Awesome  -->
     <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
@@ -47,7 +45,7 @@ if (!isset($_SESSION['role'])) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Accueil</span></a>
@@ -58,7 +56,7 @@ if (!isset($_SESSION['role'])) {
             <!-- Divider -->
             <hr class="sidebar-divider">
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            <li class="nav-item  active">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-user-plus"></i>
                     <span>Ajouter un Stagiaire</span></a>

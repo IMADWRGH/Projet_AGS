@@ -42,7 +42,7 @@ if (!isset($_SESSION['role'])) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Accueil</span></a>
@@ -60,7 +60,7 @@ if (!isset($_SESSION['role'])) {
             </li>
 
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            <li class="nav-item  active">
                 <a class="nav-link" href="list.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>les liste des Stagiaires</span></a>
