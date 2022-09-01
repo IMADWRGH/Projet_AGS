@@ -82,9 +82,9 @@ CREATE TABLE `dossier` (
 --
 
 INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `ID_STAGE`) VALUES
-('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'accepté', NULL, 'T1'),
-('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'non traité', NULL, 'T2'),
-('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'en attendant', NULL, 'T3');
+('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'accepte', NULL, 'T1'),
+('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'non traite', NULL, 'T2'),
+('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'en attente', NULL, 'T3');
 
 -- --------------------------------------------------------
 
