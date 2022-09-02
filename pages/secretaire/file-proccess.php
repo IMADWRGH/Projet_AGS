@@ -1,6 +1,6 @@
 <?php
 // extend -> "./create.php"
-if (isset($_POST["ok"])) {
+if (isset($_POST["create_demande"])) {
 
     $fileNameCv = $_FILES['cv']['name'];
     $fileNameDe = $_FILES['demande']['name'];
@@ -14,41 +14,23 @@ if (isset($_POST["ok"])) {
     $location2;
     $location3;
 
-    if (isset($fileNameCv)) {
-        if (!empty($fileNameCv)) {
-            $raw = explode('.', $fileNameCv);
-            $fileExtention = strtolower(end($raw));
-            $location1 = $location . 'cv/' . 'CV_' . $newStage_id . '.' . $fileExtention;
-            if (move_uploaded_file($temp_name1, $location1)) {
-                echo 'CV uploaded successfully <br/>';
-            }
-        }
-    } else {
-        echo '!cv <br/>';
+    if (isset($fileNameCv) && !empty($fileNameCv)) {
+        $raw = explode('.', $fileNameCv);
+        $fileExtention = strtolower(end($raw));
+        $location1 = $location . 'cv/' . 'CV_' . $newStage_id . '.' . $fileExtention;
+        move_uploaded_file($temp_name1, $location1);
     }
-    if (isset($fileNameDe)) {
-        if (!empty($fileNameDe)) {
-            $raw = explode('.', $fileNameDe);
-            $fileExtention = strtolower(end($raw));
-            $location2 = $location . 'demande/' . 'Demande_'  . $newStage_id . '.' . $fileExtention;
-            if (move_uploaded_file($temp_name2, $location2)) {
-                echo 'Demande uploaded successfully <br/>';
-            }
-        }
-    } else {
-        echo '!demande <br/>';
+    if (isset($fileNameDe) && !empty($fileNameDe)) {
+        $raw = explode('.', $fileNameDe);
+        $fileExtention = strtolower(end($raw));
+        $location2 = $location . 'demande/' . 'Demande_'  . $newStage_id . '.' . $fileExtention;
+        move_uploaded_file($temp_name2, $location2);
     }
-    if (isset($fileNameAs)) {
-        if (!empty($fileNameAs)) {
-            $raw = explode('.', $fileNameAs);
-            $fileExtention = strtolower(end($raw));
-            $location3 = $location . 'assurance/' . 'Assurance_'  . $newStage_id . '.' . $fileExtention;
-            if (move_uploaded_file($temp_name3, $location3)) {
-                echo 'Assurance uploaded successfully <br/>';
-            }
-        }
-    } else {
-        echo '!assurance <br/>';
+    if (isset($fileNameAs) && !empty($fileNameAs)) {
+        $raw = explode('.', $fileNameAs);
+        $fileExtention = strtolower(end($raw));
+        $location3 = $location . 'assurance/' . 'Assurance_'  . $newStage_id . '.' . $fileExtention;
+        move_uploaded_file($temp_name3, $location3);
     }
 
     //File name with extention to save in db

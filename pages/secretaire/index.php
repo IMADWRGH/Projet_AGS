@@ -103,7 +103,7 @@ if (!isset($_SESSION['role'])) {
                     <h1 class="h3 mb-2 text-gray-800">Ajouter Un Stagiaire</h1>
 
                     <!-- Content Row -->
-                    <form method="POST" action="create.php" enctype="multipart/form-data">
+                    <form id="createDemande" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col">
                                 <div class="form-row">
@@ -270,6 +270,46 @@ if (!isset($_SESSION['role'])) {
     </div>
 
     <?php include("../includes/scripts.php"); ?>
+
+    <!-- Page level plugins -->
+    <script src="../../resources/vendor/alertify/alertify.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $(document).on('submit', '#createDemande', function(e) {
+
+                e.preventDefault();
+
+                let formData = new FormData(this);
+                formData.append("create_demande", true);
+
+                $.ajax({
+                    type: "POST",
+                    url: "create.php",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+
+                        let res = jQuery.parseJSON(response);
+
+                        if (res.status === 500) {
+
+                            alertify.error(res.message);
+                            console.error(res.error)
+
+                        } else if (res.status === 200) {
+
+                            alertify.success(res.message);
+                            $('#createDemande').trigger('reset')
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

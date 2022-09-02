@@ -2,7 +2,7 @@
 require "../../helpers/condb.php";
 require("../../helpers/functions.php");
 
-if (isset($_POST["ok"])) {
+if (isset($_POST["create_demande"])) {
 
     $newStage_id = generateID("T", "stage");
     $newDossier_id = generateID("D", "dossier");
@@ -27,7 +27,7 @@ if (isset($_POST["ok"])) {
     $stageReq = "INSERT INTO stage (ID_STAGE, DATE_D, DATE_F, `TYPE`, ID_DEPARTEMENT) 
             VALUES ('$newStage_id', '$startDate', '$endDate', '$stageType', '$department');";
     $dossierReq = "INSERT INTO dossier (ID_DOSSIER, CV, DEMANDE, ASSURANCE, DATE_DEPOSE, STATUT, ID_STAGE)
-            VALUES ('$newDossier_id', '$fileCv', '$fileDe', '$fileAs', NOW(), 'en attendant', '$newStage_id');"; //Skipped Col : PHOTO, COPY_CIN, AUTRE_FICHERS	
+            VALUES ('$newDossier_id', '$fileCv', '$fileDe', '$fileAs', NOW(), 'en attente', '$newStage_id');"; //Skipped Col : PHOTO, COPY_CIN, AUTRE_FICHERS	
     $stagiaireReq = "INSERT INTO stagiaire (ID_STAGIAIRE, CIN, NOM, PRENOM, SEXE, TEL, EMAIL, VILLE, ADRESSE, ETABLISSEMENT, NIVEAU, ID_STAGE)
             VALUES('$newStagiaire_id', '$cin','$nom','$prenom','$sexe','$tel','$email','$ville','$adresse','$uv','$niveau', '$newStage_id');";
 
@@ -39,7 +39,7 @@ if (isset($_POST["ok"])) {
 
         $res = [
             'status' => 200,
-            'message' => "Created successfully",
+            'message' => "Créé avec succès",
         ];
         echo json_encode($res);
         return false;
@@ -47,7 +47,7 @@ if (isset($_POST["ok"])) {
 
         $res = [
             'status' => 500,
-            'message' => "Failed to create",
+            'message' => "Échec de la création",
             'error' => mysqli_error($con),
         ];
         echo json_encode($res);
