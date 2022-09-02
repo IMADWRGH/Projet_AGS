@@ -206,11 +206,12 @@ if (!isset($_SESSION['role'])) {
                                             <div class="col-md-2 p-0 font-weight-bold">Statut</div>
                                         </li>
                                         <?php
-                                        $query = "SELECT sr.NOM, sr.PRENOM, d.DATE_DEPOSE, d.STATUT, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
+                                        $query = "SELECT sr.NOM, sr.PRENOM, d.DATE_DEPOSE, d.STATUT, d.updated_at, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
                                         FROM stage AS st
                                         LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = st.ID_STAGE
                                         LEFT JOIN dossier AS d ON d.ID_STAGE = st.ID_STAGE
                                         LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
+                                        ORDER BY d.updated_at DESC
                                         LIMIT 30";
                                         $query_run = mysqli_query($con, $query);
                                         if (mysqli_num_rows($query_run) > 0) {
@@ -246,6 +247,7 @@ if (!isset($_SESSION['role'])) {
                                     </ul>
                                 </div>
                             </div>
+                            <div class="card-footer"><small><i class="fas fa-info-circle text-gray-400"></i> Modifications récentes de statut des demandes par les chefs des départements apparaît au-dessus</small></div>
                         </div>
                     </div>
                 </div>
