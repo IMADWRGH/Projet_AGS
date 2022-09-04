@@ -1,8 +1,19 @@
 <?php
 session_start();
 if (!isset($_SESSION['role'])) {
-    header("location: ../403.html");
+    if (!$_SESSION['role'] == 'chef' || !$_SESSION['role'] == 'admin')
+        header("location: ../403.html");
     die;
+}
+if (!isset($_SESSION['chef'])) {
+?>
+    <div class="alert alert-warning alert-dismissible fade show m-0 text-center" role="alert">
+        <strong>Mode Super Chef </strong>: Les résultats seront pour toutes les departemnts
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
 }
 ?>
 <!DOCTYPE html>
@@ -122,11 +133,14 @@ if (!isset($_SESSION['role'])) {
                                         <tbody>
                                             <?php
                                             require("../../helpers/condb.php");
+                                            $nomChef = ''; //!isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
+                                            echo $nomChef;
                                             $query = "SELECT sr.NOM, sr.PRENOM, sr.NIVEAU, sr.ETABLISSEMENT, st.DATE_D, st.DATE_F, st.TYPE, d.CV, d.ASSURANCE, d.updated_at, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
                                             FROM stage AS st
                                             LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = st.ID_STAGE
                                             LEFT JOIN dossier AS d ON d.ID_STAGE = st.ID_STAGE
                                             LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
+                                            WHERE d.STATUT = 'en attente' AND dp.CHEF = '$nomChef'
                                             ORDER BY d.updated_at DESC
                                             LIMIT 30";
                                             $query_run = mysqli_query($con, $query);

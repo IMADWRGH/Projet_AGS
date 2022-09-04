@@ -6,9 +6,9 @@ if (isset($_POST['submit'])) {
     $pwd = mysqli_real_escape_string($con, $_POST['password']);
 
     if (empty($username)) {
-        header("location: ../index.php?error=Username is required");
+        header("location: ../index.php?error=Le nom d'utilisateur est requis");
     } elseif (empty($pwd)) {
-        header("location: ../index.php?error=Password is required");
+        header("location: ../index.php?error=Mot de passe requis");
     }
 
     $query = "SELECT * FROM utilisateur WHERE USERNAME = '$username' AND PWD = '$pwd'";
@@ -28,10 +28,16 @@ if (isset($_POST['submit'])) {
             $_SESSION['username'] = $row['USERNAME'];
             header("location: ../pages/presense");
             die;
-        }else{
+        } elseif ($row["ROLE"] == "secretaire") {
             $_SESSION['role'] = $row['ROLE'];
             $_SESSION['username'] = $row['USERNAME'];
             header("location: ../pages/secretaire");
+            die;
+        } elseif ($row["ROLE"] == "chef") {
+            $_SESSION['role'] = $row['ROLE'];
+            $_SESSION['username'] = $row['USERNAME'];
+            $_SESSION['chef'] = $row['USERNAME']; // Should chef dep name = chef username
+            header("location: ../pages/chef");
             die;
         }
     } else {
