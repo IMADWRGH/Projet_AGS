@@ -1,10 +1,17 @@
 <?php
 session_start();
+$t = $_SESSION['role'];
+$allowed = array("chef", "admin");
 if (!isset($_SESSION['role'])) {
-    if (!$_SESSION['role'] == 'chef' || !$_SESSION['role'] == 'admin')
-        header("location: ../403.html");
+    header("location: ../403.html?ID=$t&d=1");
     die;
 }
+
+if (!in_array($t, $allowed)) {
+    header("location: ../403.html?ID=$t&d=2");
+    die;
+}
+
 if (!isset($_SESSION['chef'])) {
 ?>
     <div class="alert alert-warning alert-dismissible fade show m-0 text-center" role="alert">
@@ -15,6 +22,7 @@ if (!isset($_SESSION['chef'])) {
     </div>
 <?php
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
