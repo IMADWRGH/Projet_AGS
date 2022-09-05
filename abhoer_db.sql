@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 01, 2022 at 07:43 AM
+-- Generation Time: Sep 05, 2022 at 05:23 AM
 -- Server version: 10.4.24-MariaDB
--- PHP Version: 8.0.19
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,9 @@ CREATE TABLE `contination` (
   `ABSENCES` smallint(6) DEFAULT NULL,
   `TEMPS_DEPLOYE` smallint(6) DEFAULT NULL,
   `EQUIPEMENT` int(11) NOT NULL,
-  `ID_STAGE` char(10) NOT NULL
+  `ID_STAGE` char(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -46,17 +48,19 @@ CREATE TABLE `departement` (
   `ID_DEPARTEMENT` char(10) NOT NULL,
   `NOM` varchar(30) NOT NULL,
   `CHEF` varchar(30) NOT NULL,
-  `ETAT` tinyint(1) NOT NULL
+  `ETAT` tinyint(1) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `departement`
 --
 
-INSERT INTO `departement` (`ID_DEPARTEMENT`, `NOM`, `CHEF`, `ETAT`) VALUES
-('DP1', 'IT', 'KHALED', 1),
-('DP2', 'DPH', 'KAMAL', 1),
-('DP3', 'RH', 'ASMA', 1);
+INSERT INTO `departement` (`ID_DEPARTEMENT`, `NOM`, `CHEF`, `ETAT`, `created_at`, `updated_at`) VALUES
+('DP1', 'IT', 'ACHRAF', 1, '2022-09-04 22:50:18', '2022-09-04 22:53:27'),
+('DP2', 'DPH', 'KAMAL', 1, '2022-09-04 22:50:18', '2022-09-04 22:50:18'),
+('DP3', 'RH', 'ASMA', 1, '2022-09-04 22:50:18', '2022-09-04 22:50:18');
 
 -- --------------------------------------------------------
 
@@ -74,17 +78,21 @@ CREATE TABLE `dossier` (
   `DATE_DEPOSE` datetime NOT NULL,
   `STATUT` char(15) NOT NULL,
   `AUTRE_FICHERS` char(20) DEFAULT NULL,
-  `ID_STAGE` char(10) NOT NULL
+  `RAISON` varchar(255) DEFAULT NULL,
+  `OBSERVATION` varchar(255) DEFAULT NULL,
+  `ID_STAGE` char(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `dossier`
 --
 
-INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `ID_STAGE`) VALUES
-('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'accepte', NULL, 'T1'),
-('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'non traite', NULL, 'T2'),
-('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'en attente', NULL, 'T3');
+INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `RAISON`, `OBSERVATION`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'en attente', NULL, NULL, 'f', 'T1', '2022-09-04 22:50:40', '2022-09-05 03:32:25'),
+('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'accepte', NULL, NULL, NULL, 'T2', '2022-09-04 22:50:40', '2022-09-05 02:46:53'),
+('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'accepte', NULL, NULL, NULL, 'T3', '2022-09-04 22:50:40', '2022-09-05 02:46:53');
 
 -- --------------------------------------------------------
 
@@ -108,7 +116,10 @@ CREATE TABLE `evaluation` (
   `E12` char(10) NOT NULL,
   `E13` char(10) NOT NULL,
   `COMMONTAIRE` char(255) NOT NULL,
-  `ID_STAGE` char(10) NOT NULL
+  `TERMINE` tinyint(1) DEFAULT 0,
+  `ID_STAGE` char(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -165,17 +176,19 @@ CREATE TABLE `stage` (
   `DATE_F` date NOT NULL,
   `TYPE` char(30) DEFAULT NULL,
   `ENCADRENT` char(50) DEFAULT NULL,
-  `ID_DEPARTEMENT` char(10) DEFAULT NULL
+  `ID_DEPARTEMENT` char(10) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stage`
 --
 
-INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRENT`, `ID_DEPARTEMENT`) VALUES
-('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1'),
-('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2'),
-('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3');
+INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRENT`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
+('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
+('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
+('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
 
 -- --------------------------------------------------------
 
@@ -195,17 +208,19 @@ CREATE TABLE `stagiaire` (
   `ADRESSE` varchar(100) NOT NULL,
   `ETABLISSEMENT` char(100) NOT NULL,
   `NIVEAU` char(50) NOT NULL,
-  `ID_STAGE` char(10) NOT NULL
+  `ID_STAGE` char(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stagiaire`
 --
 
-INSERT INTO `stagiaire` (`ID_STAGIAIRE`, `CIN`, `NOM`, `PRENOM`, `SEXE`, `TEL`, `EMAIL`, `VILLE`, `ADRESSE`, `ETABLISSEMENT`, `NIVEAU`, `ID_STAGE`) VALUES
-('S1', 'IA111222', 'MBARKI', 'BIO', 'M', '0611223344', 'test@test.com', 'BENI MELLAL', 'TAGZIRT', 'ECOSIG', 'BAC+2', 'T1'),
-('S2', 'I333222', 'TIFU', 'OMAR', 'F', '0622334455', 'imar@omar.com', 'AGADIR', 'AOURIR', 'ISTA', 'BAC+2', 'T2'),
-('S3', 'IA1122', 'KHADIJA', 'HILALI', 'F', '0611223344', 'a@b.com', 'casa', 'CT02', 'FP', 'Bac+3', 'T3');
+INSERT INTO `stagiaire` (`ID_STAGIAIRE`, `CIN`, `NOM`, `PRENOM`, `SEXE`, `TEL`, `EMAIL`, `VILLE`, `ADRESSE`, `ETABLISSEMENT`, `NIVEAU`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('S1', 'IA111222', 'MBARKI', 'BIO', 'M', '0611223344', 'test@test.com', 'BENI MELLAL', 'TAGZIRT', 'ECOSIG', 'BAC+2', 'T1', '2022-09-04 22:51:47', '2022-09-04 22:51:47'),
+('S2', 'I333222', 'TIFU', 'OMAR', 'F', '0622334455', 'imar@omar.com', 'AGADIR', 'AOURIR', 'ISTA', 'BAC+2', 'T2', '2022-09-04 22:51:47', '2022-09-04 22:51:47'),
+('S3', 'IA1122', 'KHADIJA', 'HILALI', 'F', '0611223344', 'a@b.com', 'casa', 'CT02', 'FP', 'Bac+3', 'T3', '2022-09-04 22:51:47', '2022-09-04 22:51:47');
 
 -- --------------------------------------------------------
 
@@ -219,16 +234,19 @@ CREATE TABLE `utilisateur` (
   `PWD` varchar(20) NOT NULL,
   `EMAIL` varchar(50) NOT NULL,
   `ROLE` char(20) NOT NULL,
-  `ETAT` tinyint(1) NOT NULL DEFAULT 1
+  `ETAT` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`USER_ID`, `USERNAME`, `PWD`, `EMAIL`, `ROLE`, `ETAT`) VALUES
-('U1', 'Mustapha', '123', 'admin@admin.com', 'admin', 1),
-('U2', 'Ali', '123', 'presense@presense.com', 'presense', 1);
+INSERT INTO `utilisateur` (`USER_ID`, `USERNAME`, `PWD`, `EMAIL`, `ROLE`, `ETAT`, `created_at`, `updated_at`) VALUES
+('U1', 'Mustapha', '123', 'admin@admin.com', 'admin', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
+('U2', 'Ali', '123', 'presense@presense.com', 'presense', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
+('U3', 'ACHRAF', '123', 'chef@abhoer.com', 'chef', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58');
 
 --
 -- Indexes for dumped tables

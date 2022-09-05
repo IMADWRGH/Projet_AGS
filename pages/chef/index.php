@@ -51,9 +51,8 @@ if (!isset($_SESSION['role'])) {
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="requests.php">
                     <i class="fas fa-fw fa-inbox"></i>
                     <span>dernières demandes</span></a>
             </li>
@@ -65,13 +64,13 @@ if (!isset($_SESSION['role'])) {
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="status.php">
+                <a class="nav-link" href="tasks.php">
                     <i class="fas fa-fw fa-clipboard-list"></i>
                     <span>tâches de stagiaire</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="status.php">
+                <a class="nav-link" href="evaluation.php">
                     <i class="fas fa-fw fa-star"></i>
                     <span>évaluation un stagiaire</span></a>
             </li>
