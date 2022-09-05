@@ -31,6 +31,9 @@ if (!isset($_SESSION['chef'])) {
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
     <link href="../../resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <!-- Alertify styles -->
+    <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
+    <link rel="stylesheet" href="../../resources/vendor/alertify/css/themes/bootstrap.css" />
     <!-- Font Awesome  -->
     <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 </head>
@@ -61,7 +64,6 @@ if (!isset($_SESSION['chef'])) {
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
 
             <li class="nav-item active">
                 <a class="nav-link" href="requests.php">
@@ -118,7 +120,7 @@ if (!isset($_SESSION['chef'])) {
                         <div class="card shadow mb-4 flex-fill">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-hover">
+                                    <table class="table table-striped table-hover" id="demandeTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">CV</th>
@@ -133,14 +135,13 @@ if (!isset($_SESSION['chef'])) {
                                         <tbody>
                                             <?php
                                             require("../../helpers/condb.php");
-                                            $nomChef = ''; //!isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
-                                            echo $nomChef;
+                                            $nomChef = !isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
                                             $query = "SELECT sr.NOM, sr.PRENOM, sr.NIVEAU, sr.ETABLISSEMENT, st.DATE_D, st.DATE_F, st.TYPE, d.CV, d.ASSURANCE, d.updated_at, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
                                             FROM stage AS st
                                             LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = st.ID_STAGE
                                             LEFT JOIN dossier AS d ON d.ID_STAGE = st.ID_STAGE
                                             LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
-                                            WHERE d.STATUT = 'en attente' AND dp.CHEF = '$nomChef'
+                                            WHERE d.STATUT = 'en attente' AND dp.CHEF LIKE '%$nomChef'
                                             ORDER BY d.updated_at DESC
                                             LIMIT 30";
                                             $query_run = mysqli_query($con, $query);
@@ -166,12 +167,20 @@ if (!isset($_SESSION['chef'])) {
                                                         </td>
                                                         <td>
                                                             <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-secondary btn-sm viewBtn" data-toggle="modal" data-target="#demandeDetails"><i class="fas fa-eye fa-fw"></i></button>
-                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-success btn-sm checkBtn" data-toggle="modal" data-target="#accepteModal"><i class="fas fa-check fa-fw"></i></button>
-                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-outline-danger btn-sm rejectBtn"><i class="fas fa-times fa-fw"></i></button>
+                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-success btn-sm checkBtn"><i class="fas fa-check fa-fw"></i></button>
+                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-outline-danger btn-sm removeBtn" data-toggle="modal" data-target="#rejectModal"><i class="fas fa-times fa-fw"></i></button>
                                                         </td>
                                                     </tr>
-                                            <?php
+                                                <?php
                                                 }
+                                            } else {
+                                                ?>
+                                                <tr>
+                                                    <td colspan="7" class="alert alert-success text-center" role="alert">
+                                                        ✅ il n'y a pas de demandes pour le moment ✅
+                                                    </td>
+                                                </tr>
+                                            <?php
                                             }
                                             ?>
                                         </tbody>
@@ -210,19 +219,19 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">C.I.N</label>
-                                <p id="cin" class="border-bottom border-primary">IA123456</p>
+                                <p id="cin" class="form-control">-</p>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Nom Prenom</label>
-                                <p id="nom" class="border-bottom border-primary">IA123456</p>
+                                <p id="nom" class="form-control">-</p>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Sexe</label>
-                                <p id="sexe" class="border-bottom border-primary">IA123456</p>
+                                <p id="sexe" class="form-control">-</p>
                             </div>
                         </li>
                     </ul>
@@ -230,20 +239,20 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Tel</label>
-                                <p id="tel" class="border-bottom border-primary">IA123456</p>
+                                <p id="tel" class="form-control">-</p>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Email</label>
-                                <p id="email" class="border-bottom border-primary">IA123456</p>
+                                <p id="email" class="form-control">-</p>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="mb-3">
-                                <label class="font-weight-bold"><i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Le nombre de ses demandes dans les archives de l'institution"></i>
-                                    <label class="font-weight-bold">Fois</label>
-                                    <p id="fois" class="border-bottom border-primary">0</p>
+                                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Le nombre de ses demandes dans les archives de l'institution"></i>
+                                <label class="font-weight-bold">Fois</label>
+                                <p id="fois" class="form-control">0</p>
                             </div>
                         </li>
                     </ul>
@@ -251,13 +260,13 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item flex-fill">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Address</label>
-                                <p id="adresse" class="border-bottom border-primary">IA123456</p>
+                                <p id="adresse" class="form-control">-</p>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Ville</label>
-                                <p id="ville" class="border-bottom border-primary">IA123456</p>
+                                <p id="ville" class="form-control">-</p>
                             </div>
                         </li>
                     </ul>
@@ -265,7 +274,7 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item flex-fill">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Pièces Jointes</label>
-                                <p id="pj" class="border-bottom border-primary">
+                                <p id="pj" class="form-control">
                                     <i class="fas fa-paperclip"></i>
                                     <a class="cvLink" target="_blank" hidden>CV</a> ;
                                     <a class="deLink" target="_blank" hidden> Demande</a> ;
@@ -276,7 +285,7 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Demande Déposé</label>
-                                <p id="dateDepose" class="border-bottom border-primary">IA123456</p>
+                                <p id="dateDepose" class="form-control">-</p>
                             </div>
                         </li>
                     </ul>
@@ -284,7 +293,7 @@ if (!isset($_SESSION['chef'])) {
                         <li class="list-inline-item flex-fill">
                             <div class="mb-3">
                                 <label class="font-weight-bold">Secretaire Commentaire</label>
-                                <p id="cmntr" class="border-bottom border-primary text-break">test</p>
+                                <p id="cmntr" class="form-control text-break">-</p>
                             </div>
                         </li>
                     </ul>
@@ -297,23 +306,25 @@ if (!isset($_SESSION['chef'])) {
         </div>
     </div>
 
-    <!-- Check Modal-->
-    <div class="modal fade" id="accepteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Reject Demande Modal-->
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Refuser</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning d-none" id="errorMessageUpdate"></div>
-                    <p>Souhaitez-vous accepter le stagiaire?</p>
+                    <p class="font-weight-bold">Souhaitez-vous refuser le stagiaire?</p>
+                    <label>Raison</label>
+                    <textarea class="form-control" id="raison" rows="2" maxlength="255" placeholder="Optionnel"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" type="button" data-dismiss="modal">Accepter</button>
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger rejectBtn" type="button" data-dismiss="modal">Refuser</button>
+                    <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -340,21 +351,33 @@ if (!isset($_SESSION['chef'])) {
 
     <?php include("../includes/scripts.php"); ?>
 
+    <!-- Page level plugins -->
+    <script src="../../resources/vendor/alertify/alertify.min.js"></script>
+
     <script>
         // Bootstrap Tooltip
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
         })
+
         // Reset modal data when close
         $('.modal').on('hidden.bs.modal', function(e) {
             $(this).removeData();
+            // viewModal
             $('#viewDetails a').attr("hidden", true);
+            // rejectModal
+            $('textarea').val("")
+        });
+
+        // Modal autofocus input
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).find('textarea').focus();
         });
     </script>
 
     <script>
-        //Fetch And Fill Inputs Modal Before Update Presence
         $(document).ready(function() {
+            //Fetch And Fill Inputs Modal Before Update Presence
             $(document).on('click', '.viewBtn', function(e) {
 
                 let stage_id = $(this).val();
@@ -387,12 +410,14 @@ if (!isset($_SESSION['chef'])) {
                             res.data.CV && $('.cvLink').removeAttr('hidden').attr('href', "../../uploads/cv/" + res.data.CV);
                             res.data.DEMANDE && $('.deLink').removeAttr('hidden').attr('href', "../../uploads/demande/" + res.data.DEMANDE);
                             res.data.ASSURANCE && $('.asLink').removeAttr('hidden').attr('href', "../../uploads/assurance/" + res.data.ASSURANCE);
+                            $('#dateDepose').text((res.data.DATE_DEPOSE))
+                            $('#cmntr').text(res.data.OBSERVATION);
                         }
                     }
                 });
             });
 
-            // When click checkBtn update 'dossier[STATUT]'
+            // When click rejectBtn update 'dossier[STATUT] = 'accepte''
             $(document).on('click', '.checkBtn', function(e) {
 
                 let stage_id = $(this).val();
@@ -408,23 +433,51 @@ if (!isset($_SESSION['chef'])) {
 
                         let res = jQuery.parseJSON(response)
 
-                        if (res.status === 404) {
+                        if (res.status === 500) {
 
-                            $('#message').removeClass('d-none');
-                            $('#errorMessageFetch').text(res.message);
+                            alertify.error(res.message);
 
                         } else if (res.status === 200) {
 
-                            $('#cin').text(res.data.CIN);
-                            $('#nom').text(res.data.NOM + " " + res.data.PRENOM);
-                            $('#sexe').text(res.data.SEXE);
-                            $('#tel').text(res.data.TEL);
-                            $('#email').text(res.data.EMAIL);
-                            $('#adresse').text(res.data.ADRESSE);
-                            $('#ville').text(res.data.VILLE);
-                            res.data.CV ? $('.cvLink').removeAttr('hidden').attr('href', "../../uploads/cv/" + res.data.CV) : null
-                            res.data.DEMANDE && $('.deLink').removeAttr('hidden').attr('href', "../../uploads/demande/" + res.data.DEMANDE)
-                            res.data.ASSURANCE && $('.asLink').removeAttr('hidden').attr('href', "../../uploads/assurance/" + res.data.ASSURANCE)
+                            alertify.success(res.message);
+                            $("#demandeTable").load(location.href + " #demandeTable");
+                        }
+                    }
+                });
+            });
+
+            // When click removeBtn pass data [stage_id] to modal 'rejectModal'
+            $(".removeBtn").click(function() {
+                let stage_id = $(this).val();
+                $("#rejectModal .rejectBtn").val(stage_id);
+            });
+
+            // When click rejectBtn update 'dossier[STATUT] = 'refuse''
+            $(document).on('click', '.rejectBtn', function(e) {
+
+                let stage_id = $(this).val();
+                let raison = $("#raison").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "handleDemandes.php",
+                    data: {
+                        'refuse_demande': true,
+                        'stage_id': stage_id,
+                        'raison': raison,
+                    },
+                    success: function(response) {
+
+                        let res = jQuery.parseJSON(response)
+
+                        if (res.status === 500) {
+
+                            alertify.error(res.message);
+
+                        } else if (res.status === 200) {
+
+                            alertify.success(res.message);
+                            $("#demandeTable").load(location.href + " #demandeTable");
                         }
                     }
                 });
