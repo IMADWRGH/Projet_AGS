@@ -1,14 +1,13 @@
 <?php
 session_start();
-$t = $_SESSION['role'];
 $allowed = array("chef", "admin");
 if (!isset($_SESSION['role'])) {
-    header("location: ../403.html?ID=$t&d=1");
+    header("location: ../403.html");
     die;
 }
 
 if (!in_array($t, $allowed)) {
-    header("location: ../403.html?ID=$t&d=2");
+    header("location: ../403.html");
     die;
 }
 
