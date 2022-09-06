@@ -6,7 +6,7 @@ if (!isset($_SESSION['role'])) {
     die;
 }
 
-if (!in_array($t, $allowed)) {
+if (!in_array($_SESSION['role'], $allowed)) {
     header("location: ../403.html");
     die;
 }
