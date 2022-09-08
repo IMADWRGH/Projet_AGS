@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 05, 2022 at 05:23 AM
+-- Generation Time: Sep 08, 2022 at 11:31 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -90,9 +90,9 @@ CREATE TABLE `dossier` (
 --
 
 INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `RAISON`, `OBSERVATION`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
-('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'en attente', NULL, NULL, 'f', 'T1', '2022-09-04 22:50:40', '2022-09-05 03:32:25'),
+('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'accepte', NULL, NULL, 'f', 'T1', '2022-09-04 22:50:40', '2022-09-05 07:12:59'),
 ('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'accepte', NULL, NULL, NULL, 'T2', '2022-09-04 22:50:40', '2022-09-05 02:46:53'),
-('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'accepte', NULL, NULL, NULL, 'T3', '2022-09-04 22:50:40', '2022-09-05 02:46:53');
+('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.svg', NULL, '2022-09-01 05:20:08', 'accepte', NULL, NULL, NULL, 'T3', '2022-09-04 22:50:40', '2022-09-08 04:36:02');
 
 -- --------------------------------------------------------
 
@@ -121,6 +121,13 @@ CREATE TABLE `evaluation` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `evaluation`
+--
+
+INSERT INTO `evaluation` (`ID_EVALUATION`, `E1`, `E2`, `E3`, `E4`, `E5`, `E6`, `E7`, `E8`, `E9`, `E10`, `E11`, `E12`, `E13`, `COMMONTAIRE`, `TERMINE`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('E1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'T1', '2022-09-06 20:53:32', '2022-09-06 20:53:32');
 
 -- --------------------------------------------------------
 
@@ -175,7 +182,7 @@ CREATE TABLE `stage` (
   `DATE_D` date NOT NULL,
   `DATE_F` date NOT NULL,
   `TYPE` char(30) DEFAULT NULL,
-  `ENCADRENT` char(50) DEFAULT NULL,
+  `ENCADRANT` char(50) DEFAULT NULL,
   `ID_DEPARTEMENT` char(10) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -185,7 +192,7 @@ CREATE TABLE `stage` (
 -- Dumping data for table `stage`
 --
 
-INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRENT`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
+INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRANT`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
 ('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
 ('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
 ('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
