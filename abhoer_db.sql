@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2022 at 09:54 AM
+-- Generation Time: Sep 11, 2022 at 02:06 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -116,7 +116,6 @@ CREATE TABLE `evaluation` (
   `E12` char(10) NOT NULL,
   `E13` char(10) NOT NULL,
   `COMMONTAIRE` char(255) NOT NULL,
-  `TERMINE` tinyint(1) DEFAULT 0,
   `ID_STAGE` char(10) NOT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -126,8 +125,8 @@ CREATE TABLE `evaluation` (
 -- Dumping data for table `evaluation`
 --
 
-INSERT INTO `evaluation` (`ID_EVALUATION`, `E1`, `E2`, `E3`, `E4`, `E5`, `E6`, `E7`, `E8`, `E9`, `E10`, `E11`, `E12`, `E13`, `COMMONTAIRE`, `TERMINE`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
-('E1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'T1', '2022-09-06 20:53:32', '2022-09-06 20:53:32');
+INSERT INTO `evaluation` (`ID_EVALUATION`, `E1`, `E2`, `E3`, `E4`, `E5`, `E6`, `E7`, `E8`, `E9`, `E10`, `E11`, `E12`, `E13`, `COMMONTAIRE`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('E1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'T1', '2022-09-06 20:53:32', '2022-09-06 20:53:32');
 
 -- --------------------------------------------------------
 
@@ -170,6 +169,7 @@ CREATE TABLE `stage` (
   `DATE_F` date NOT NULL,
   `TYPE` char(30) DEFAULT NULL,
   `ENCADRANT` char(50) DEFAULT NULL,
+  `TERMINE` tinyint(1) NOT NULL DEFAULT 0,
   `ID_DEPARTEMENT` char(10) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -179,10 +179,10 @@ CREATE TABLE `stage` (
 -- Dumping data for table `stage`
 --
 
-INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRANT`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
-('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
-('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
-('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
+INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRANT`, `TERMINE`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
+('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 0, 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
+('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 1, 'DP1', '2022-09-04 22:51:37', '2022-09-11 00:28:02'),
+('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 0, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
 
 -- --------------------------------------------------------
 
@@ -263,7 +263,9 @@ CREATE TABLE `utilisateur` (
 INSERT INTO `utilisateur` (`USER_ID`, `USERNAME`, `PWD`, `EMAIL`, `ROLE`, `ETAT`, `created_at`, `updated_at`) VALUES
 ('U1', 'Mustapha', '123', 'admin@admin.com', 'admin', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
 ('U2', 'Ali', '123', 'presense@presense.com', 'presense', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
-('U3', 'ACHRAF', '123', 'chef@abhoer.com', 'chef', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58');
+('U3', 'ACHRAF', '123', 'chef@abhoer.com', 'chef', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
+('U4', 'KAMAL', '123', '', 'chef', 1, '2022-09-10 23:59:44', '2022-09-10 23:59:44'),
+('U5', 'ASMA', '123', '', 'chef', 1, '2022-09-10 23:59:44', '2022-09-10 23:59:44');
 
 --
 -- Indexes for dumped tables
