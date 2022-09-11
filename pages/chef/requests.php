@@ -1,25 +1,14 @@
 <?php
 session_start();
-$allowed = array("chef", "admin");
 if (!isset($_SESSION['role'])) {
     header("location: ../403.html");
     die;
 }
 
+$allowed = array("chef", "admin");
 if (!in_array($_SESSION['role'], $allowed)) {
     header("location: ../403.html");
     die;
-}
-
-if (!isset($_SESSION['chef'])) {
-?>
-    <div class="alert alert-warning alert-dismissible fade show m-0 text-center" role="alert">
-        <strong>Mode Super Chef </strong>: Les résultats seront pour toutes les departemnts
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-<?php
 }
 
 ?>
