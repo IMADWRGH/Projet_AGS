@@ -4,6 +4,24 @@ if (!isset($_SESSION['role'])) {
     header("location: ../403.html");
     die;
 }
+
+$allowed = array("chef", "admin");
+if (!in_array($_SESSION['role'], $allowed)) {
+    header("location: ../403.html");
+    die;
+}
+
+if (!isset($_SESSION['chef'])) {
+?>
+    <div class="alert alert-warning alert-dismissible fade show m-0 text-center" role="alert">
+        <strong>Mode Super Chef </strong>: Les résultats seront pour toutes les departemnts
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -107,14 +125,17 @@ if (!isset($_SESSION['role'])) {
                         // Count STATUT query (Ex: en attande:4, accepte:2...)
                         require "../../helpers/condb.php";
 
-                        $query = "SELECT d.STATUT, st.DATE_D, st.DATE_F, e.TERMINE,
+                        $nomChef = !isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
+                        $query = "SELECT d.STATUT, st.DATE_D, st.DATE_F, e.TERMINE, dp.CHEF,
                         count(CASE WHEN STATUT = 'accepte' THEN STATUT END) AS acc_count,
                         count(CASE WHEN STATUT = 'en attente' THEN STATUT END) AS att_count,
                         count(CASE WHEN TERMINE = 1 THEN TERMINE END) AS ter_count,
                         count(CASE WHEN CURRENT_DATE > st.DATE_F AND e.TERMINE = 0 THEN STATUT END) AS aba_count
                         FROM dossier AS d
                         LEFT JOIN stage AS st ON st.ID_STAGE = d.ID_STAGE
-                        LEFT JOIN evaluation AS e ON e.ID_STAGE = st.ID_STAGE";
+                        LEFT JOIN evaluation AS e ON e.ID_STAGE = st.ID_STAGE
+                        LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
+                        WHERE dp.CHEF LIKE '%$nomChef'";
 
                         $query_run = mysqli_query($con, $query);
                         $statut;

@@ -49,7 +49,7 @@ if (isset($_POST['update_presence'])) {
 
         $res = [
             'status' => 200,
-            'message' => "Updated Successfully",
+            'message' => "Modifié avec succès",
         ];
         echo json_encode($res);
         return false;
@@ -57,7 +57,7 @@ if (isset($_POST['update_presence'])) {
 
         $res = [
             'status' => 500,
-            'message' => "Failed to update",
+            'message' => "Échec de la modification",
             'error' => mysqli_error($con),
         ];
         echo json_encode($res);

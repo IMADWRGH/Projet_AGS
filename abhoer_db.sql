@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 05, 2022 at 05:23 AM
+-- Generation Time: Sep 11, 2022 at 02:06 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -90,9 +90,9 @@ CREATE TABLE `dossier` (
 --
 
 INSERT INTO `dossier` (`ID_DOSSIER`, `CV`, `PHOTO`, `DEMANDE`, `ASSURANCE`, `COPY_CIN`, `DATE_DEPOSE`, `STATUT`, `AUTRE_FICHERS`, `RAISON`, `OBSERVATION`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
-('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'en attente', NULL, NULL, 'f', 'T1', '2022-09-04 22:50:40', '2022-09-05 03:32:25'),
+('D1', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:00:26', 'en attente', NULL, NULL, 'f', 'T1', '2022-09-04 22:50:40', '2022-09-10 08:35:30'),
 ('D2', NULL, NULL, NULL, NULL, NULL, '2022-09-01 07:02:27', 'accepte', NULL, NULL, NULL, 'T2', '2022-09-04 22:50:40', '2022-09-05 02:46:53'),
-('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.png', NULL, '2022-09-01 05:20:08', 'accepte', NULL, NULL, NULL, 'T3', '2022-09-04 22:50:40', '2022-09-05 02:46:53');
+('D3', 'CV_T3.svg', NULL, 'Demande_T3.svg', 'Assurance_T3.svg', NULL, '2022-09-01 05:20:08', 'accepte', NULL, NULL, NULL, 'T3', '2022-09-04 22:50:40', '2022-09-08 04:36:02');
 
 -- --------------------------------------------------------
 
@@ -116,24 +116,17 @@ CREATE TABLE `evaluation` (
   `E12` char(10) NOT NULL,
   `E13` char(10) NOT NULL,
   `COMMONTAIRE` char(255) NOT NULL,
-  `TERMINE` tinyint(1) DEFAULT 0,
   `ID_STAGE` char(10) NOT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `filiere`
+-- Dumping data for table `evaluation`
 --
 
-CREATE TABLE `filiere` (
-  `ID_FILIERE` char(10) NOT NULL,
-  `NOM_FILIERE` char(50) NOT NULL,
-  `CHEF_FILIERE` char(50) NOT NULL,
-  `ID_STAGE` char(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `evaluation` (`ID_EVALUATION`, `E1`, `E2`, `E3`, `E4`, `E5`, `E6`, `E7`, `E8`, `E9`, `E10`, `E11`, `E12`, `E13`, `COMMONTAIRE`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('E1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'T1', '2022-09-06 20:53:32', '2022-09-06 20:53:32');
 
 -- --------------------------------------------------------
 
@@ -175,7 +168,8 @@ CREATE TABLE `stage` (
   `DATE_D` date NOT NULL,
   `DATE_F` date NOT NULL,
   `TYPE` char(30) DEFAULT NULL,
-  `ENCADRENT` char(50) DEFAULT NULL,
+  `ENCADRANT` char(50) DEFAULT NULL,
+  `TERMINE` tinyint(1) NOT NULL DEFAULT 0,
   `ID_DEPARTEMENT` char(10) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -185,10 +179,10 @@ CREATE TABLE `stage` (
 -- Dumping data for table `stage`
 --
 
-INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRENT`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
-('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
-('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 'DP2', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
-('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
+INSERT INTO `stage` (`ID_STAGE`, `DATE_D`, `DATE_F`, `TYPE`, `ENCADRANT`, `TERMINE`, `ID_DEPARTEMENT`, `created_at`, `updated_at`) VALUES
+('T1', '2022-08-01', '2022-08-31', 'init', 'Khaled', 0, 'DP1', '2022-09-04 22:51:37', '2022-09-04 22:51:37'),
+('T2', '2022-08-01', '2022-09-30', 'app', 'achraf', 1, 'DP1', '2022-09-04 22:51:37', '2022-09-11 00:28:02'),
+('T3', '2022-09-01', '2022-09-30', 'pfe', NULL, 0, 'DP3', '2022-09-04 22:51:37', '2022-09-04 22:59:21');
 
 -- --------------------------------------------------------
 
@@ -225,6 +219,29 @@ INSERT INTO `stagiaire` (`ID_STAGIAIRE`, `CIN`, `NOM`, `PRENOM`, `SEXE`, `TEL`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tache`
+--
+
+CREATE TABLE `tache` (
+  `ID_TACHE` char(10) NOT NULL,
+  `TACHE` varchar(100) DEFAULT NULL,
+  `TEMPS` smallint(6) DEFAULT NULL,
+  `MATERIEL` varchar(100) DEFAULT NULL,
+  `ID_STAGE` char(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tache`
+--
+
+INSERT INTO `tache` (`ID_TACHE`, `TACHE`, `TEMPS`, `MATERIEL`, `ID_STAGE`, `created_at`, `updated_at`) VALUES
+('A1', 'back-end', 25, 'php', 'T1', '2022-09-10 06:57:47', '2022-09-10 08:53:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `utilisateur`
 --
 
@@ -246,7 +263,9 @@ CREATE TABLE `utilisateur` (
 INSERT INTO `utilisateur` (`USER_ID`, `USERNAME`, `PWD`, `EMAIL`, `ROLE`, `ETAT`, `created_at`, `updated_at`) VALUES
 ('U1', 'Mustapha', '123', 'admin@admin.com', 'admin', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
 ('U2', 'Ali', '123', 'presense@presense.com', 'presense', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
-('U3', 'ACHRAF', '123', 'chef@abhoer.com', 'chef', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58');
+('U3', 'ACHRAF', '123', 'chef@abhoer.com', 'chef', 1, '2022-09-04 22:51:58', '2022-09-04 22:51:58'),
+('U4', 'KAMAL', '123', '', 'chef', 1, '2022-09-10 23:59:44', '2022-09-10 23:59:44'),
+('U5', 'ASMA', '123', '', 'chef', 1, '2022-09-10 23:59:44', '2022-09-10 23:59:44');
 
 --
 -- Indexes for dumped tables
@@ -280,13 +299,6 @@ ALTER TABLE `evaluation`
   ADD KEY `ID_STAGE` (`ID_STAGE`);
 
 --
--- Indexes for table `filiere`
---
-ALTER TABLE `filiere`
-  ADD PRIMARY KEY (`ID_FILIERE`),
-  ADD KEY `ID_STAGE` (`ID_STAGE`);
-
---
 -- Indexes for table `presence`
 --
 ALTER TABLE `presence`
@@ -305,6 +317,13 @@ ALTER TABLE `stage`
 --
 ALTER TABLE `stagiaire`
   ADD PRIMARY KEY (`ID_STAGIAIRE`),
+  ADD KEY `ID_STAGE` (`ID_STAGE`);
+
+--
+-- Indexes for table `tache`
+--
+ALTER TABLE `tache`
+  ADD PRIMARY KEY (`ID_TACHE`),
   ADD KEY `ID_STAGE` (`ID_STAGE`);
 
 --
@@ -336,12 +355,6 @@ ALTER TABLE `evaluation`
   ADD CONSTRAINT `evaluation_ibfk_1` FOREIGN KEY (`ID_STAGE`) REFERENCES `stage` (`ID_STAGE`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `filiere`
---
-ALTER TABLE `filiere`
-  ADD CONSTRAINT `filiere_ibfk_1` FOREIGN KEY (`ID_STAGE`) REFERENCES `stage` (`ID_STAGE`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Constraints for table `presence`
 --
 ALTER TABLE `presence`
@@ -352,6 +365,12 @@ ALTER TABLE `presence`
 --
 ALTER TABLE `stagiaire`
   ADD CONSTRAINT `stagiaire_ibfk_1` FOREIGN KEY (`ID_STAGE`) REFERENCES `stage` (`ID_STAGE`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `tache`
+--
+ALTER TABLE `tache`
+  ADD CONSTRAINT `tache_ibfk_1` FOREIGN KEY (`ID_STAGE`) REFERENCES `stage` (`ID_STAGE`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

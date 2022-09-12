@@ -27,11 +27,26 @@ if (!in_array($_SESSION['role'], $allowed)) {
     <!-- Custom styles for this template -->
     <link href="../../resources/css/sb-admin-2.css" rel="stylesheet">
     <link href="../../resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="../../resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Alertify styles -->
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/alertify.css" />
     <link rel="stylesheet" href="../../resources/vendor/alertify/css/themes/bootstrap.css" />
     <!-- Font Awesome  -->
     <link href="../../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Style Details Control ( first column in table ) -->
+    <style>
+        td.details-control {
+            text-align: center;
+            color: forestgreen;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            text-align: center;
+            color: red;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -61,13 +76,13 @@ if (!in_array($_SESSION['role'], $allowed)) {
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="requests.php">
                     <i class="fas fa-fw fa-inbox"></i>
                     <span>dernières demandes</span></a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="list.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>liste des stagiaires</span></a>
@@ -109,84 +124,94 @@ if (!in_array($_SESSION['role'], $allowed)) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Demandes en attente</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Liste Des Stagiaires</h1>
 
-                    <div class="row">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Aperçu</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th></th>
+                                            <th>Nom Prenom</th>
+                                            <th>Type</th>
+                                            <th>Date_D</th>
+                                            <th>Date_F</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                        <div class="card shadow mb-4 flex-fill">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover" id="demandeTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">CV</th>
-                                                <th scope="col">Nom Prenom</th>
-                                                <th scope="col">Type</th>
-                                                <th scope="col">Niveau</th>
-                                                <th scope="col">Ecole</th>
-                                                <th scope="col">Durée</th>
-                                                <th scope="col" style="width: 150px;">Options</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            require("../../helpers/condb.php");
-                                            $nomChef = !isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
-                                            $query = "SELECT sr.NOM, sr.PRENOM, sr.NIVEAU, sr.ETABLISSEMENT, st.DATE_D, st.DATE_F, st.TYPE, d.CV, d.ASSURANCE, d.updated_at, dp.NOM AS DP_NOM, st.ID_DEPARTEMENT, st.ID_STAGE
-                                            FROM stage AS st
-                                            LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = st.ID_STAGE
-                                            LEFT JOIN dossier AS d ON d.ID_STAGE = st.ID_STAGE
-                                            LEFT JOIN departement AS dp ON dp.ID_DEPARTEMENT = st.ID_DEPARTEMENT
-                                            WHERE d.STATUT = 'en attente' AND dp.CHEF LIKE '%$nomChef'
-                                            ORDER BY d.updated_at DESC
-                                            LIMIT 30";
-                                            $query_run = mysqli_query($con, $query);
-                                            if (mysqli_num_rows($query_run) > 0) {
-                                                foreach ($query_run as $result) {
-                                                    $date_s = new DateTime($result['DATE_D']);
-                                                    $date_e = new DateTime($result['DATE_F']);
-                                                    $diff = date_diff($date_s, $date_e);
-                                            ?>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            <?php if ($result['CV']) { ?>
-                                                                <a href="../../uploads/cv/<?= $result["CV"] ?>" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-                                                            <?php } ?>
-                                                        </th>
-                                                        <td> <?= $result['NOM'] . " " . $result['PRENOM'] ?> </td>
-                                                        <td><?= strtoupper($result['TYPE']) ?></td>
-                                                        <td><?= $result['NIVEAU'] ?></td>
-                                                        <td><?= $result['ETABLISSEMENT'] ?></td>
-                                                        <td>
-                                                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="left" title="<?= date("d/m", strtotime($result['DATE_D'])) . "⬌" . date("d/m", strtotime($result['DATE_F'])) ?>"></i>
-                                                            <small><?= $diff->format("%aj") ?></small>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-secondary btn-sm viewBtn" data-toggle="modal" data-target="#demandeDetails"><i class="fas fa-eye fa-fw"></i></button>
-                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-success btn-sm checkBtn"><i class="fas fa-check fa-fw"></i></button>
-                                                            <button type="button" value="<?= $result['ID_STAGE'] ?>" class="btn btn-outline-danger btn-sm removeBtn" data-toggle="modal" data-target="#rejectModal"><i class="fas fa-times fa-fw"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                <?php
-                                                }
-                                            } else {
-                                                ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Registre de présence</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">Recherche</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="presenceTable" width="100%" cellspacing="0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Nom Prenom</th>
+                                            <th>Entre_M</th>
+                                            <th>Sortie_M</th>
+                                            <th>Entre_A</th>
+                                            <th>Sortie_A</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        require "../../helpers/condb.php";
+                                        $query = "SELECT sr.ID_STAGE, sr.NOM, sr.PRENOM, p.DATE, p.HR_ENTRE_M, p.HR_SORTIE_M, p.HR_ENTRE_A, p.HR_SORTIE_A
+                                            FROM presence AS p
+                                            LEFT JOIN stagiaire AS sr ON sr.ID_STAGE = p.ID_STAGE
+                                            WHERE sr.NOM LIKE '%' OR sr.PRENOM LIKE '%' OR sr.ID_STAGE = ''";
+
+                                        $query_run = mysqli_query($con, $query);
+                                        if (mysqli_num_rows($query_run) > 0) {
+                                            foreach ($query_run as $presence) {
+                                        ?>
                                                 <tr>
-                                                    <td colspan="7" class="alert alert-success text-center" role="alert">
-                                                        ✅ il n'y a pas de demandes pour le moment ✅
-                                                    </td>
+                                                    <td class="align-middle"><?= date("d-m-y", strtotime($presence["DATE"])) ?></td>
+                                                    <td class="align-middle"><?= $presence["NOM"] ?> <?= $presence["PRENOM"] ?></td>
+                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_ENTRE_M"])) ?></td>
+                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_M"])) ?></td>
+                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_ENTRE_A"])) ?></td>
+                                                    <td class="align-middle"><?= date("H:i", strtotime($presence["HR_SORTIE_A"])) ?></td>
                                                 </tr>
                                             <?php
                                             }
+                                        } else {
                                             ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            <tr>
+                                                <td colspan="7" class="alert alert-success text-center" role="alert">
+                                                    ✅ il n'y a pas de demandes pour le moment ✅
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="card-footer"><small><i class="fas fa-info-circle text-gray-400"></i>Demandes triées de l'ancienne à la nouvelle</small></div>
                         </div>
                     </div>
+
                 </div>
+                <!-- /.container-fluid -->
             </div>
         </div>
 
@@ -348,135 +373,145 @@ if (!in_array($_SESSION['role'], $allowed)) {
     <?php include("../includes/scripts.php"); ?>
 
     <!-- Page level plugins -->
+    <script src="../../resources/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="../../resources/vendor/alertify/alertify.min.js"></script>
 
     <script>
-        // Bootstrap Tooltip
-        $(function() {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
-        // Reset modal data when close
-        $('.modal').on('hidden.bs.modal', function(e) {
-            $(this).removeData();
-            // viewModal
-            $('#viewDetails a').attr("hidden", true);
-            // rejectModal
-            $('textarea').val("")
-        });
-
-        // Modal autofocus input
-        $('.modal').on('shown.bs.modal', function() {
-            $(this).find('textarea').focus();
+        // Call the dataTables jQuery plugin
+        $(document).ready(function() {
+            // list stagiaire table
+            $('#dataTable').DataTable();
+            // Precense table
+            $('#presenceTable').DataTable();
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            //Fetch And Fill Inputs Modal Before Update Presence
-            $(document).on('click', '.viewBtn', function(e) {
-
-                let stage_id = $(this).val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "handleDemandes.php",
-                    data: {
-                        'view_demande': true,
-                        'stage_id': stage_id
-                    },
-                    success: function(response) {
-
-                        let res = jQuery.parseJSON(response)
-
-                        if (res.status === 404) {
-
-                            $('#message').removeClass('d-none');
-                            $('#errorMessageFetch').text(res.message);
-
-                        } else if (res.status === 200) {
-
-                            $('#cin').text(res.data.CIN);
-                            $('#nom').text(res.data.NOM + " " + res.data.PRENOM);
-                            $('#sexe').text(res.data.SEXE);
-                            $('#tel').text(res.data.TEL);
-                            $('#email').text(res.data.EMAIL);
-                            $('#adresse').text(res.data.ADRESSE);
-                            $('#ville').text(res.data.VILLE);
-                            res.data.CV && $('.cvLink').removeAttr('hidden').attr('href', "../../uploads/cv/" + res.data.CV);
-                            res.data.DEMANDE && $('.deLink').removeAttr('hidden').attr('href', "../../uploads/demande/" + res.data.DEMANDE);
-                            res.data.ASSURANCE && $('.asLink').removeAttr('hidden').attr('href', "../../uploads/assurance/" + res.data.ASSURANCE);
-                            $('#dateDepose').text((res.data.DATE_DEPOSE))
-                            $('#cmntr').text(res.data.OBSERVATION);
-                        }
+    <script type="text/javascript">
+        // list stagiaire table
+        let dt = $("#dataTable").DataTable({
+            'ajax': {
+                url: 'list-data.php'
+            },
+            columns: [{
+                    'className': 'details-control',
+                    'orderable': false,
+                    'data': null,
+                    'defaultContent': '',
+                    'render': function() {
+                        return '<i class="fas fa-plus"></i>'
                     }
-                });
-            });
-
-            // When click rejectBtn update 'dossier[STATUT] = 'accepte''
-            $(document).on('click', '.checkBtn', function(e) {
-
-                let stage_id = $(this).val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "handleDemandes.php",
-                    data: {
-                        'accepte_demande': true,
-                        'stage_id': stage_id
-                    },
-                    success: function(response) {
-
-                        let res = jQuery.parseJSON(response)
-
-                        if (res.status === 500) {
-
-                            alertify.error(res.message);
-
-                        } else if (res.status === 200) {
-
-                            alertify.success(res.message);
-                            $("#demandeTable").load(location.href + " #demandeTable");
+                },
+                {
+                    data: 'NOM',
+                },
+                {
+                    data: 'TYPE',
+                },
+                {
+                    data: 'DATE_D',
+                    render: function(data, type, row) {
+                        if (type === "sort" || type === "type") {
+                            return data;
                         }
+                        return (new Date(data)).toLocaleDateString('en-GB');
                     }
-                });
-            });
-
-            // When click removeBtn pass data [stage_id] to modal 'rejectModal'
-            $(".removeBtn").click(function() {
-                let stage_id = $(this).val();
-                $("#rejectModal .rejectBtn").val(stage_id);
-            });
-
-            // When click rejectBtn update 'dossier[STATUT] = 'refuse''
-            $(document).on('click', '.rejectBtn', function(e) {
-
-                let stage_id = $(this).val();
-                let raison = $("#raison").val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "handleDemandes.php",
-                    data: {
-                        'refuse_demande': true,
-                        'stage_id': stage_id,
-                        'raison': raison,
-                    },
-                    success: function(response) {
-
-                        let res = jQuery.parseJSON(response)
-
-                        if (res.status === 500) {
-
-                            alertify.error(res.message);
-
-                        } else if (res.status === 200) {
-
-                            alertify.success(res.message);
-                            $("#demandeTable").load(location.href + " #demandeTable");
+                },
+                {
+                    data: 'DATE_F',
+                    render: function(data, type, row) {
+                        if (type === "sort" || type === "type") {
+                            return data;
                         }
+                        return (new Date(data)).toLocaleDateString('en-GB');
                     }
-                });
+                },
+            ],
+            order: [
+                [1, 'asc']
+            ],
+        })
+
+        function format(d) {
+            return '<table class="table table-borderless table-sm m-0" pl-2>' +
+                '<tr>' +
+                '<th>CIN : ' + '</th>' +
+                '<td>' + d.CIN + '</td>' +
+                '<th>Sexe : ' + '</th>' +
+                '<td>' + d.SEXE + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Niveau : ' + '</th>' +
+                '<td>' + d.NIVEAU + '</td>' +
+                '<th>Etablissement : ' + '</th>' +
+                '<td>' + d.ETABLISSEMENT + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Tel : ' + '</th>' +
+                '<td>' + d.TEL + '</td>' +
+                '<th>Email : ' + '</th>' +
+                '<td>' + d.EMAIL + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Ville : ' + '</th>' +
+                '<td>' + d.VILLE + '</td>' +
+                '<th>Adresse : ' + '</th>' +
+                '<td>' + d.ADRESSE + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Departement : ' + '</th>' +
+                '<td>' + d.DP_NOM + '</td>' +
+                '<th>Encadrant : ' + '</th>' +
+                '<td>' + d.ENCADRANT + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Demande Statut : ' + '</th>' +
+                '<td>' + d.STATUT + '</td>' +
+                '<th>Evaluation Termine : ' + '</th>' +
+                '<td>' + (d.TERMINE ? "oui" : "non") + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Piece Jointes : ' + '</th>' +
+                '<td colspan="2">' +
+                (d.CV ? '<a class="pr-3" href="../../uploads/cv/' + d.CV + '" target="_blank"><i class="fas fa-external-link-alt"></i>CV</a>' : '--- | ') +
+                (d.DEMANDE ? '<a class="pr-3" href="../../uploads/demande/' + d.DEMANDE + '" target="_blank"><i class="fas fa-external-link-alt"></i>Demande</a>' : '--- | ') +
+                (d.ASSURANCE ? '<a class="pr-3" href="../../uploads/assurance/' + d.ASSURANCE + '" target="_blank"><i class="fas fa-external-link-alt"></i>Assurance</a>' : '---') +
+                '</td>' +
+                '</tr>'
+
+        }
+
+        let detailRows = [];
+
+        $('#dataTable tbody').on('click', 'tr td.details-control', function() {
+            let tr = $(this).closest('tr');
+            let row = dt.row(tr);
+            let idx = detailRows.indexOf(tr.attr('id'));
+
+            if (row.child.isShown()) {
+                tr.removeClass('details');
+                row.child.hide();
+                tr.removeClass('shown');
+                $('tr i').attr('class', 'fas fa-plus');
+
+                // Remove from the 'open' array
+                detailRows.splice(idx, 1);
+            } else {
+                tr.addClass('details');
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                $('tr.shown i').attr('class', 'fas fa-minus');
+
+                // Add to the 'open' array
+                if (idx === -1) {
+                    detailRows.push(tr.attr('id'));
+                }
+            }
+        });
+
+        dt.on('draw', function() {
+            detailRows.forEach(function(id, i) {
+                $('#' + id + ' td.details-control').trigger('click');
             });
         });
     </script>

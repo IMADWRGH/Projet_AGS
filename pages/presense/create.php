@@ -21,7 +21,7 @@ if (isset($_POST['create_presence'])) {
 
         $res = [
             'status' => 200,
-            'message' => "Created successfully",
+            'message' => "Créé avec succès",
         ];
         echo json_encode($res);
         return false;
@@ -29,7 +29,7 @@ if (isset($_POST['create_presence'])) {
 
         $res = [
             'status' => 500,
-            'message' => "Failed to create",
+            'message' => "Échec de la création",
             'error' => mysqli_error($con),
         ];
         echo json_encode($res);
