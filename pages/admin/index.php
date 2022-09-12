@@ -52,13 +52,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
             <hr class="sidebar-divider">
 
             <li class="nav-item">
-                <a class="nav-link" href="requests.php">
+                <a class="nav-link" href="departement.php">
                     <i class="fas fa-fw fa-inbox"></i>
                     <span>Gérer les departements</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="list.php">
+                <a class="nav-link" href="comptes.php">
                     <i class="fas fa-fw fa-list"></i>
                     <span>Gérer les comptes</span></a>
             </li>
