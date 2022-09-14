@@ -126,11 +126,11 @@ if (!isset($_SESSION['chef'])) {
                         require "../../helpers/condb.php";
 
                         $nomChef = !isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
-                        $query = "SELECT d.STATUT, st.DATE_D, st.DATE_F, e.TERMINE, dp.CHEF,
+                        $query = "SELECT d.STATUT, st.DATE_D, st.DATE_F, st.TERMINE, dp.CHEF,
                         count(CASE WHEN STATUT = 'accepte' THEN STATUT END) AS acc_count,
                         count(CASE WHEN STATUT = 'en attente' THEN STATUT END) AS att_count,
                         count(CASE WHEN TERMINE = 1 THEN TERMINE END) AS ter_count,
-                        count(CASE WHEN CURRENT_DATE > st.DATE_F AND e.TERMINE = 0 THEN STATUT END) AS aba_count
+                        count(CASE WHEN CURRENT_DATE > st.DATE_F AND st.TERMINE = 0 THEN STATUT END) AS aba_count
                         FROM dossier AS d
                         LEFT JOIN stage AS st ON st.ID_STAGE = d.ID_STAGE
                         LEFT JOIN evaluation AS e ON e.ID_STAGE = st.ID_STAGE

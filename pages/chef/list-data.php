@@ -3,7 +3,7 @@ require("../../helpers/condb.php");
 
 $nomChef = !isset($_SESSION['chef']) ? "" : $_SESSION['chef'];
 
-$query = "SELECT sr.CIN, sr.NOM, sr.PRENOM, sr.SEXE, sr.TEL, sr.EMAIL, sr.VILLE, sr.ADRESSE, sr.NIVEAU, sr.ETABLISSEMENT, st.TYPE, st.ENCADRANT, st.DATE_D, st.DATE_F, d.CV, d.ASSURANCE, d.DEMANDE, d.DATE_DEPOSE, d.STATUT, dp.NOM AS DP_NOM, e.TERMINE
+$query = "SELECT sr.CIN, sr.NOM, sr.PRENOM, sr.SEXE, sr.TEL, sr.EMAIL, sr.VILLE, sr.ADRESSE, sr.NIVEAU, sr.ETABLISSEMENT, st.TYPE, st.ENCADRANT, st.DATE_D, st.DATE_F, st.TERMINE, d.CV, d.ASSURANCE, d.DEMANDE, d.DATE_DEPOSE, d.STATUT, dp.NOM AS DP_NOM
             FROM stagiaire AS sr
             LEFT JOIN stage AS st ON st.ID_STAGE = sr.ID_STAGE
             LEFT JOIN dossier AS d ON d.ID_STAGE = sr.ID_STAGE

@@ -183,7 +183,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
                 <form id="createDep">
                     <div class="modal-body">
                         <div class="alert alert-warning d-none" id="errorMessageUpdate"></div>
-                        <input type="hidden" name="dep_id" id="dep_id">
+                        <input type="hidden" name="dep_id_new" id="dep_id_new">
                         <div class="mb-3">
                             <label for="dep_nom_new">Nom de dep</label>
                             <input type="text" name="dep_nom_new" class="form-control">
